@@ -1,0 +1,30 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0 2rem;
+  width: 100vw;
+}
+
+.left {
+  display: flex;
+  cursor: pointer;
+  gap: .5rem;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0;
+  color: #00b4d8;
+}
+
+.right {
+  display: flex;
+  gap: .5rem;
+}
+
+.button {
+  padding: .5rem;
+}
+

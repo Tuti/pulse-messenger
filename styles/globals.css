@@ -24,3 +24,17 @@ a {
     background: black;
   }
 }
+
+.project-colors {
+  color: #03045e;
+  color: #023e8a;
+  color: #0077b6;
+  color: #0096c7;
+  color: #48cae4;
+  color: #90e0ef;
+  color: #ade8f4;
+  color: #caf0f8;
+
+  /* colors used so far */
+  color: #00b4d8;
+}

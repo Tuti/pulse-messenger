@@ -1,0 +1,78 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  cursor: pointer;
+  padding-left: 2rem;
+  margin-top: 1rem;
+  gap: .5rem;
+  width: 100%;
+  font-size: 2rem;
+  color: #00b4d8;
+}
+
+.title {
+  margin: 0;
+}
+.main {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 5rem;
+  width: 100%;
+}
+
+.login {
+  display: flex;
+  gap: 1rem;
+}
+
+.hero {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  width: clamp(300px, 20vw, 500px);
+  font-size: 1.5rem;
+  color: #00b4d8;
+}
+
+.p {
+  margin: 0;
+  margin-top: 1rem;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  gap: .5rem;
+  color: #00b4d8;
+  margin: 0;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.user-input {
+  padding: .5rem;
+}
+
+.message {
+  display: flex;
+  margin-top: 3rem;
+  font-size: 1.5rem;
+  color: red;
+}
+
+.hidden {
+  visibility: hidden;
+}
