@@ -20,7 +20,7 @@ export async function storeUser(userCred, displayName) {
   }
 }
 
-export async function isDisplayNameUsed(displayName) {
+export async function userExists(displayName) {
   const usersRef = collection(db, 'users');
   const displayNameQuery = query(usersRef, where('displayName', '==', `${displayName}`));
   const snapshot = await getDocs(displayNameQuery);

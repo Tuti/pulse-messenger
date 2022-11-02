@@ -8,22 +8,22 @@ export default function ChatsList(props){
 
   //TEST DATA
   const chats = [
-    // {
-    //   username: 'username1',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username2',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username3',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username4',
-    //   lastMessage: 'this is a test message',
-    // },
+    {
+      username: 'username1',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username2',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username3',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username4',
+      lastMessage: 'this is a test message',
+    },
     
   ];
 
@@ -44,6 +44,14 @@ export default function ChatsList(props){
           <div className={styles['empty-list']}>
             {'no messages yet... :('}
           </div>
+        </div>
+      }
+      {chatTiles.length > 0 &&
+        <div className={styles['tiles']}>
+          <div className={styles['empty-list']}>
+            {'no messages yet... :('}
+          </div>
+          {chatTiles}
         </div>
       }
     </>  
