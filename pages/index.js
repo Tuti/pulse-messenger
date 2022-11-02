@@ -1,16 +1,19 @@
-import styles from '../styles/Landing-Page.module.css'
+import styles from '../styles/pages/Landing-Page.module.css'
 import Navbar from '../components/navbar';
 import Head from 'next/head'
 import { auth } from '../firebase/firebase';
 import { useRouter } from 'next/router'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
+import { useUser } from '../context/userContext';
 
 export default function LandingPage() {
   const router = useRouter();
+  const user = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('msg');
+
   function handleLogin() {
     signInWithEmailAndPassword(auth, email, password)
       .then(console.log('logged in'))
@@ -19,6 +22,11 @@ export default function LandingPage() {
         setMessage(error.code);
       });
   }
+
+  if(user) {
+    router.push('/home');
+  }
+  
   return (
     <div className={styles['container']}>
       <Head>

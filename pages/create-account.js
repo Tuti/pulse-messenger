@@ -1,4 +1,4 @@
-import styles from '../styles/Create-Account.module.css';
+import styles from '../styles/pages/Create-Account.module.css';
 import Navbar from '../components/navbar';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase/firebase';

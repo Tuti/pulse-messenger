@@ -1,19 +1,45 @@
-import ChatTile from "./chat-tile"
+import styles from '../styles/components/chats-list.module.css';
+import ChatTilePreview from "./chat-tile-preview";
 
 
 export default function ChatsList(props){
-  
-  const chatTiles = props.chats.map((value, index) => {
+  //TODO
+  //const chats = props.chats;
+
+  //TEST DATA
+  const chats = [
+    {
+      username: 'username1',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username2',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username3',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username4',
+      lastMessage: 'this is a test message',
+    },
+    
+  ];
+
+  const chatTiles = chats.map((value, index) => {
     return(
-      <ChatTile 
-        key={props.username}
+      <ChatTilePreview
+        key={value.username}
+        username={value.username}
+        lastMessage={value.lastMessage}
       />
     )
   })
 
   return(
-    <div className={styles['chats-list']}>
-      
+    <div className={styles['tiles']}>
+      {chatTiles}
     </div>
   ) 
 } 
