@@ -26,7 +26,7 @@ export default function Navbar(props) {
   }
 
   return(
-    <nav className={styles['navbar']}>
+    <nav className={styles['container']}>
       <div onClick={handleRoute} className={styles['left']}>
         <h1 className={styles['title']}>
           Pulse

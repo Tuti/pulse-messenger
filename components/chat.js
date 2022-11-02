@@ -8,9 +8,9 @@ export default function Chat() {
       <div className={styles['sidebar']}>
         <ChatsList />
       </div>
-      <main className={styles['main']}>
+      <div className={styles['current']}>
         <ChatCurrent />
-      </main>
+      </div>
     </div>
   )
 }

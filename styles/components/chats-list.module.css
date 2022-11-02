@@ -5,3 +5,10 @@
   flex: 1;
 }
 
+.empty-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid white;
+  height: clamp(40px, 10vh, 60px);
+}

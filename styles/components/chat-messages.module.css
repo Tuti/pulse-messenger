@@ -1,0 +1,51 @@
+
+.container {
+
+}
+
+.sent {
+  display: flex;
+  flex: 1;
+  flex-direction: row-reverse;
+  margin: 1rem;
+}
+
+.sent-bg {
+  background-color: #00b4d8;
+  border: 1px solid white ;
+}
+
+.received {
+  display: flex;
+  flex: 1;
+  margin: 1rem;
+}
+
+.received-bg {
+  background-color: #4E4E51;
+  border: 1px solid white;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: .5rem;
+  width: clamp(250px, 40%, 500px)
+}
+
+.sub-heading {
+  display: flex;
+  gap: .5rem;
+}
+
+.displayName {
+  font-weight: bold;
+}
+
+.date {
+
+}
+.message-content {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -11,10 +11,10 @@
   grid-template-columns: 1fr 3fr;
   grid-template-rows: auto;
   grid-template-areas: 
-    "sidebar main"
-    "sidebar main"
-    "sidebar main"
-    "sidebar main";
+    "sidebar chat"
+    "sidebar chat"
+    "sidebar chat"
+    "sidebar chat";
   margin: 2rem 0px;
 }
 
@@ -24,7 +24,10 @@
   border: 1px solid #00b4d8;
 }
 
-.main {
-  grid-area: main;
+.current {
+  grid-area: chat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   border: 1px solid #00b4d8;
 }
