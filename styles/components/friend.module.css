@@ -1,0 +1,26 @@
+
+.top-nav {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid white;
+}
+
+.button {
+  margin: .5rem;
+  cursor: pointer;
+}
+
+.search {
+  display: flex;
+  margin-top: 1rem;
+  gap: .5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+#search {
+  padding: .5rem;
+  margin: 1rem;
+  width: 100%;
+}
+

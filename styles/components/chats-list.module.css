@@ -12,3 +12,12 @@
   border-bottom: 1px solid white;
   height: clamp(40px, 10vh, 60px);
 }
+
+.friends {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid white;
+  height: clamp(20px, 10vh, 40px);
+  cursor: pointer;
+}

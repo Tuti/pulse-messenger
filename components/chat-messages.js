@@ -6,6 +6,9 @@ export default function ChatMessages() {
 
   const currentUser = useUser();
 
+  //IF LOGGED IN TO ACCOUNT OTHER THAN TUTI 
+  //WILL NOT WORK CORRECTLY
+  //REMEMBER
   const testMessages = [
     {
       displayName: 'user1',
@@ -30,7 +33,7 @@ export default function ChatMessages() {
   ];
 
   const chatHistory = testMessages.map((value, index) => {
-    if(value.displayName !== currentUser?.displayName) {
+    if(value.displayName !== currentUser.displayName) {
       return (
         <div key={index} className={styles['received']}>
           <div className={`${styles['wrapper']} ${styles['received-bg']}`}>

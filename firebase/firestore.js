@@ -2,9 +2,6 @@ import { query, doc, getFirestore, setDoc, getDoc, getDocs, collection, where, s
 import { app } from './firebase';
 
 const db = getFirestore(app);
-// connectFirestoreEmulator(db, 'localhost:8080');
-
-//TODO database stuff
 
 export async function storeUser(userCred, displayName) {
   try {
@@ -51,5 +48,40 @@ export async function isEmailUsed(email) {
       console.log(doc.id, ' => ', doc.data());
     }) 
     return true;
+  }
+}
+
+export async function addFriend(user, displayName) {
+  const usersRef = collection(db, 'users');
+  const idQuery = query(usersRef, where('displayName', '==', `${displayName}`))
+  const id_snapshot = await getDocs(idQuery);
+
+  let friend_uid = ''
+  
+  if(id_snapshot.empty) {
+    console.log('empty snapshot');
+    return;
+  } else {
+    id_snapshot.forEach(doc => {
+      friend_uid = doc.data().uid;
+    });
+  }
+
+  await setDoc(doc(db, 'users', `${user.displayName}`, 'pending-friends', `${displayName}`), {
+    displayName: displayName,
+    uid: friend_uid
+  });
+}
+
+export async function getFriendList(currentUser) {
+  const snapshot = await getDocs(collection(db, 'users', `${currentUser.displayName}`, 'friends'));
+
+  if(snapshot.empty) {
+    console.log('empty friend list');
+    return;
+  } else {
+    snapshot.forEach(doc => {
+      console.log(doc.id);
+    });
   }
 }
