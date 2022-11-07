@@ -1,6 +1,4 @@
-
 .container {
-
 }
 
 .sent {
@@ -12,7 +10,7 @@
 
 .sent-bg {
   background-color: #00b4d8;
-  border: 1px solid white ;
+  border: 1px solid white;
 }
 
 .received {
@@ -22,20 +20,20 @@
 }
 
 .received-bg {
-  background-color: #4E4E51;
+  background-color: #4e4e51;
   border: 1px solid white;
 }
 
 .wrapper {
   display: flex;
   flex-direction: column;
-  padding: .5rem;
-  width: clamp(250px, 40%, 500px)
+  padding: 0.5rem;
+  width: clamp(250px, 40%, 500px);
 }
 
 .sub-heading {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .displayName {
@@ -43,7 +41,6 @@
 }
 
 .date {
-
 }
 .message-content {
   display: flex;

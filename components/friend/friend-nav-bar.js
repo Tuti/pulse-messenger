@@ -1,41 +1,41 @@
-import styles from "../../styles/components/friend-nav-bar.module.css";
+import styles from '../../styles/components/friend-nav-bar.module.css';
 
 export default function FriendNavbar(props) {
   return (
     <>
-      <nav className={styles["top-nav"]}>
+      <nav className={styles['top-nav']}>
         {/* TODO CHANGE BG COLOR ON CLICK TO SHOW ACTIVE*/}
         <div
-          className={styles["button"]}
+          className={styles['button']}
           onClick={() => {
-            props.setActivePanel("all-list");
+            props.setActivePanel('all-list');
           }}
         >
-          {"All"}
+          {'All'}
         </div>
         <div
-          className={styles["button"]}
+          className={styles['button']}
           onClick={() => {
-            props.setActivePanel("pending");
+            props.setActivePanel('pending');
           }}
         >
-          {"Pending"}
+          {'Pending'}
         </div>
         <div
-          className={styles["button"]}
+          className={styles['button']}
           onClick={() => {
-            props.setActivePanel("blocked");
+            props.setActivePanel('blocked');
           }}
         >
-          {"Blocked"}
+          {'Blocked'}
         </div>
         <div
-          className={`${styles["button"]} ${styles["add-friend-bg"]}`}
+          className={`${styles['button']} ${styles['add-friend-bg']}`}
           onClick={() => {
-            props.setActivePanel("add-friend");
+            props.setActivePanel('add-friend');
           }}
         >
-          {"Add Friend"}
+          {'Add Friend'}
         </div>
       </nav>
     </>

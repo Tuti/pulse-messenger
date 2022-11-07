@@ -1,7 +1,7 @@
-import styles from "../styles/pages/Home.module.css";
-import Navbar from "../components/navbar";
-import Chat from "../components/chat/chat";
-import { useUser } from "../context/userContext";
+import styles from '../styles/pages/Home.module.css';
+import Navbar from '../components/navbar';
+import Chat from '../components/chat/chat';
+import { useUser } from '../context/userContext';
 
 export default function Home() {
   const currentUser = useUser();
@@ -9,12 +9,12 @@ export default function Home() {
   return (
     <>
       {!currentUser && (
-        <div className={styles["container"]}>
+        <div className={styles['container']}>
           {/* TODO LOADING ANIMATION */}
         </div>
       )}
       {currentUser && (
-        <div className={styles["container"]}>
+        <div className={styles['container']}>
           <Navbar showLogin={false} />
           <Chat />
         </div>

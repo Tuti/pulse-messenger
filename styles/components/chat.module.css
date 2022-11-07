@@ -1,4 +1,3 @@
-
 .container {
   display: flex;
   flex: 1;
@@ -10,11 +9,11 @@
   width: clamp(600px, 90vw, 1200px);
   grid-template-columns: 1fr 3fr;
   grid-template-rows: auto;
-  grid-template-areas: 
-    "sidebar chat"
-    "sidebar chat"
-    "sidebar chat"
-    "sidebar chat";
+  grid-template-areas:
+    'sidebar chat'
+    'sidebar chat'
+    'sidebar chat'
+    'sidebar chat';
   margin: 2rem 0px;
 }
 

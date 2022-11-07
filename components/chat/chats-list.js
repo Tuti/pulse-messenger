@@ -1,5 +1,5 @@
-import styles from "../../styles/components/chats-list.module.css";
-import ChatTilePreview from "./chat-tile-preview";
+import styles from '../../styles/components/chats-list.module.css';
+import ChatTilePreview from './chat-tile-preview';
 
 export default function ChatsList(props) {
   //TODO
@@ -42,12 +42,12 @@ export default function ChatsList(props) {
 
   return (
     <>
-      <div className={styles["tiles"]}>
-        <div onClick={handleFriendClick} className={styles["friends"]}>
-          {"Friends"}
+      <div className={styles['tiles']}>
+        <div onClick={handleFriendClick} className={styles['friends']}>
+          {'Friends'}
         </div>
         {chatTiles.length == 0 && (
-          <div className={styles["empty-list"]}>{"no messages yet... :("}</div>
+          <div className={styles['empty-list']}>{'no messages yet... :('}</div>
         )}
         {chatTiles.length > 0 && <>{chatTiles}</>}
       </div>

@@ -1,9 +1,9 @@
-import styles from "../styles/components/navbar.module.css";
-import { useRouter } from "next/router";
-import { useUser } from "../context/userContext";
-import { PulseSvg } from "./svgs/Pulse";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase/firebase";
+import styles from '../styles/components/navbar.module.css';
+import { useRouter } from 'next/router';
+import { useUser } from '../context/userContext';
+import { PulseSvg } from './svgs/Pulse';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/firebase';
 
 export default function Navbar(props) {
   const router = useRouter();
@@ -11,9 +11,9 @@ export default function Navbar(props) {
 
   function handleRoute() {
     if (user) {
-      router.push("/home");
+      router.push('/home');
     } else {
-      router.push("/");
+      router.push('/');
     }
   }
 
@@ -23,30 +23,30 @@ export default function Navbar(props) {
     }
 
     signOut(auth);
-    router.push("/");
+    router.push('/');
   }
 
   return (
-    <nav className={styles["container"]}>
-      <div onClick={handleRoute} className={styles["left"]}>
-        <h1 className={styles["title"]}>Pulse</h1>
-        <PulseSvg width={"48px"} />
+    <nav className={styles['container']}>
+      <div onClick={handleRoute} className={styles['left']}>
+        <h1 className={styles['title']}>Pulse</h1>
+        <PulseSvg width={'48px'} />
       </div>
       {props.showLogin && (
-        <div className={styles["right"]}>
+        <div className={styles['right']}>
           <button
             onClick={() => {
-              router.push("create-account");
+              router.push('create-account');
             }}
-            className={styles["button"]}
+            className={styles['button']}
           >
             Try Pulse
           </button>
         </div>
       )}
       {user && (
-        <div className={styles["right"]}>
-          <button onClick={handleLogout} className={styles["button"]}>
+        <div className={styles['right']}>
+          <button onClick={handleLogout} className={styles['button']}>
             Logout
           </button>
         </div>

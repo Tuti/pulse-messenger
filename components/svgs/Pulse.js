@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
 export function PulseSvg(props) {
-  const DEFAULT_WIDTH = "24px";
-  const DEFAULT_COLOR = "#00b4d8";
+  const DEFAULT_WIDTH = '24px';
+  const DEFAULT_COLOR = '#00b4d8';
 
   return (
     <svg
