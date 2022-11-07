@@ -1,5 +1,5 @@
 import styles from "../styles/components/chat-messages.module.css";
-import { useUser } from "../context/userContext";
+import { useUser } from "../../context/userContext";
 
 export default function ChatMessages() {
   const currentUser = useUser();
