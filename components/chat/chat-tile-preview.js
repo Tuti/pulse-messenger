@@ -1,4 +1,4 @@
-import styles from "../styles/components/chat-tile-preview.module.css";
+import styles from "../../styles/components/chat-tile-preview.module.css";
 
 export default function ChatTilePreview(props) {
   const username = props.username;

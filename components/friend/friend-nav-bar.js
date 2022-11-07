@@ -1,4 +1,4 @@
-import styles from "../styles/components/friend-nav-bar.module.css";
+import styles from "../../styles/components/friend-nav-bar.module.css";
 
 export default function FriendNavbar(props) {
   return (

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import styles from "../styles/components/friend.module.css";
-import AddFriend from "./friend/add-friend";
-import FriendNavbar from "./friend/friend-nav-bar";
+import styles from "../../styles/components/friend.module.css";
+import AddFriend from "./friend-add";
+import FriendNavbar from "./friend-nav-bar";
 
 export default function Friend(props) {
   const [activePanel, setActivePanel] = useState("all-list");

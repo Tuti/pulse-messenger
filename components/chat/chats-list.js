@@ -1,4 +1,4 @@
-import styles from "../styles/components/chats-list.module.css";
+import styles from "../../styles/components/chats-list.module.css";
 import ChatTilePreview from "./chat-tile-preview";
 
 export default function ChatsList(props) {

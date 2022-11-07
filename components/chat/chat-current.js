@@ -1,4 +1,4 @@
-import styles from "../styles/components/chat-current.module.css";
+import styles from "../../styles/components/chat-current.module.css";
 import ChatMessages from "./chat-messages";
 import MessageTile from "../message-tile";
 

@@ -1,6 +1,6 @@
 import styles from "../styles/pages/Home.module.css";
 import Navbar from "../components/navbar";
-import Chat from "../components/chat";
+import Chat from "../components/chat/chat";
 import { useUser } from "../context/userContext";
 
 export default function Home() {
