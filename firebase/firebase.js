@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { browserSessionPersistence, connectAuthEmulator, getAuth, initializeAuth, setPersistence } from "firebase/auth";
+import {
+  browserSessionPersistence,
+  connectAuthEmulator,
+  getAuth,
+  initializeAuth,
+  setPersistence,
+} from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -14,7 +20,7 @@ const firebaseConfig = {
   storageBucket: "pulse-messenger-37eb5.appspot.com",
   messagingSenderId: "635949255573",
   appId: "1:635949255573:web:797fd9ea317d7dda09449c",
-  measurementId: "G-0P9KXEC0YW"
+  measurementId: "G-0P9KXEC0YW",
 };
 
 // Initialize Firebase
@@ -25,4 +31,3 @@ export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 // connectAuthEmulator(auth, 'http://localhost:9099');
 setPersistence(auth, browserSessionPersistence);
-

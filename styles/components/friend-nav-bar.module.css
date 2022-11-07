@@ -1,10 +1,18 @@
 .top-nav {
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   border-bottom: 1px solid white;
+  height: clamp(20px, 10vh, 40px);
 }
 
 .button {
-  margin: .5rem;
+  padding: 0.25rem;
   cursor: pointer;
+  border-radius: 1rem;
+}
+
+.add-friend-bg {
+  background-color: green;
 }
