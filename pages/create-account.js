@@ -33,7 +33,7 @@ export default function Login() {
     }
 
     const results = await userExists(displayName);
-    if (results) {
+    if (results.uid) {
       setMessage('Username is already in use.');
       return;
     }

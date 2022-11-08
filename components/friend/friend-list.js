@@ -1,13 +1,28 @@
-import styles from '../styles/components/friend-list.module.css';
+import styles from '../../styles/components/friend.module.css';
+import FriendAdd from './friend-add';
+import FriendNavbar from './friend-nav-bar';
+import FriendPending from './friend-pending';
+import { useState } from 'react';
 
-export default function FriendList() {
+export default function FriendList(props) {
+  const [activePanel, setActivePanel] = useState('all-list');
+
   return (
     <>
-      <div className={styles['search-wrapper']}>
-        <h1 id={styles['heading']}>Search</h1>
-        <input id={styles['search']} />
-      </div>
-      <ul className={styles['list']}></ul>
+      <FriendNavbar setActivePanel={setActivePanel} />
+      {activePanel === 'all-list' && (
+        <>
+          <div className={styles['search']}>
+            <input id={styles['search']} placeholder={'Search'} />
+          </div>
+          <ul className={styles['list']}>
+            {/* GET FRIENDS LIST AND RENDER HERE*/}
+          </ul>
+        </>
+      )}
+      {activePanel === 'pending' && <FriendPending />}
+      {activePanel === 'blocked' && <>{'blocked todo'}</>}
+      {activePanel === 'add-friend' && <FriendAdd />}
     </>
   );
 }

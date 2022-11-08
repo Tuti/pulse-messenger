@@ -1,24 +1,47 @@
 import { useState } from 'react';
-import styles from '../../styles/components/add-friend.module.css';
+import { useUser } from '../../context/userContext';
+import { addFriend } from '../../firebase/firestore';
+import styles from '../../styles/components/friend-add.module.css';
 
-export default function AddFriend() {
-  const [username, setUsername] = useState('');
+export default function FriendAdd(props) {
+  const [displayName, setDisplayName] = useState('');
+  const [message, setMessage] = useState('');
+  const currentUser = useUser();
 
-  function handleClick() {}
   return (
     <>
-      <div className={styles['search']}>
-        <input
-          id={styles['search']}
-          value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
-          placeholder={'Enter a username'}
-        />
-        <button onClick={handleClick} className={styles['button']}>
-          Send Request
-        </button>
+      <div className={styles['container']}>
+        <div className={styles['search']}>
+          <input
+            id={styles['search-input']}
+            value={displayName}
+            onChange={(e) => {
+              setDisplayName(e.target.value);
+              setMessage('');
+            }}
+            placeholder={'Enter a username'}
+          />
+          <button
+            onClick={() => {
+              console.log('attempting friend request');
+              const result = addFriend(currentUser, displayName);
+
+              if (!result) {
+                setMessage('User does not exist');
+              }
+            }}
+            className={styles['button']}
+          >
+            Send Request
+          </button>
+        </div>
+        <div
+          className={
+            message === ''
+              ? `${styles['hidden']} ${styles['error-message']}`
+              : styles['error-message']
+          }
+        >{`${message}`}</div>
       </div>
     </>
   );

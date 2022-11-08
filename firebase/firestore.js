@@ -11,7 +11,7 @@ import {
 } from 'firebase/firestore';
 import { app } from './firebase';
 
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 export async function storeUser(userCred, displayName) {
   try {
@@ -33,18 +33,20 @@ export async function userExists(displayName) {
     usersRef,
     where('displayName', '==', `${displayName}`)
   );
-  const snapshot = await getDocs(displayNameQuery);
 
-  console.log('checking displayname');
+  const snapshot = await getDocs(displayNameQuery);
   if (snapshot.empty) {
-    console.log('snapshot is empty');
+    console.log('user does not exist');
     return false;
   } else {
     snapshot.forEach((doc) => {
-      console.log(doc.id, ' => ', doc.data());
+      if (doc.data().displayName === displayName) {
+        return { uid: doc.data().uid, displayName: doc.data().displayName };
+      }
     });
-    return true;
   }
+
+  return false; //should not ever hit
 }
 
 export async function isEmailUsed(email) {
@@ -64,34 +66,34 @@ export async function isEmailUsed(email) {
   }
 }
 
-export async function addFriend(user, displayName) {
+export async function addFriend(currentUser, displayName) {
+  const user = await userExists(displayName);
+  if (!user.uid) {
+    console.log('failed user exists');
+    return false;
+  }
+
   const usersRef = collection(db, 'users');
   const idQuery = query(usersRef, where('displayName', '==', `${displayName}`));
-  const id_snapshot = await getDocs(idQuery);
-
+  const idSnapshot = await getDocs(idQuery);
   let friend_uid = '';
 
-  if (id_snapshot.empty) {
+  if (idSnapshot.empty) {
     console.log('empty snapshot');
     return;
   } else {
-    id_snapshot.forEach((doc) => {
+    idSnapshot.forEach((doc) => {
       friend_uid = doc.data().uid;
     });
   }
 
   await setDoc(
-    doc(
-      db,
-      'users',
-      `${user.displayName}`,
-      'pending-friends',
-      `${displayName}`
-    ),
+    doc(db, 'users', `${currentUser.displayName}`),
     {
       displayName: displayName,
       uid: friend_uid,
-    }
+    },
+    { merge: true }
   );
 }
 
@@ -106,6 +108,21 @@ export async function getFriendList(currentUser) {
   } else {
     snapshot.forEach((doc) => {
       console.log(doc.id);
+    });
+  }
+}
+
+export async function getPendingFriendRequests(currentUser) {
+  const snapshot = await getDocs(
+    collection(db, 'users', `${currentUser.displayName}`, 'pending-friends')
+  );
+
+  if (snapshot.empty) {
+    console.log('empty pending requests list');
+    return false;
+  } else {
+    snapshot.forEach((doc) => {
+      console.log(doc.id, ' => ', doc.data());
     });
   }
 }
