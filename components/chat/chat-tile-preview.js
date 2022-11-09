@@ -8,7 +8,7 @@ export default function ChatTilePreview(props) {
   //getting last message of the chat
 
   return (
-    <div className={styles['container']}>
+    <div className={styles['info']}>
       <div className={styles['profile-icon']}>{username.charAt(0)}</div>
       <div className={styles['message-info']}>
         <div className={styles['username']}>{username}</div>

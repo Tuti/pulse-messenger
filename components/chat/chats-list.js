@@ -7,22 +7,22 @@ export default function ChatsList(props) {
 
   //TEST DATA
   const chats = [
-    // {
-    //   username: 'username1',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username2',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username3',
-    //   lastMessage: 'this is a test message',
-    // },
-    // {
-    //   username: 'username4',
-    //   lastMessage: 'this is a test message',
-    // },
+    {
+      username: 'username1',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username2',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username3',
+      lastMessage: 'this is a test message',
+    },
+    {
+      username: 'username4',
+      lastMessage: 'this is a test message',
+    },
   ];
 
   const chatTiles = chats.map((value, index) => {
@@ -43,7 +43,7 @@ export default function ChatsList(props) {
   return (
     <>
       <div className={styles['tiles']}>
-        <div onClick={handleFriendClick} className={styles['friends']}>
+        <div onClick={handleFriendClick} className={styles['friends-button']}>
           {'Friends'}
         </div>
         {chatTiles.length == 0 && (
