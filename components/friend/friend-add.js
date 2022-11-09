@@ -4,14 +4,30 @@ import { useUser } from '../../context/userContext';
 import { addFriend } from '../../firebase/firestore';
 
 export default function FriendAdd(props) {
+  const currentUser = useUser();
   const [displayName, setDisplayName] = useState('');
   const [message, setMessage] = useState({
     show: false,
     error: false,
     content: '',
   });
-  const currentUser = useUser();
 
+  async function sendFriendRequest() {
+    const result = await addFriend(currentUser, displayName);
+    if (!result) {
+      setMessage({
+        show: true,
+        error: true,
+        content: 'User does not exist',
+      });
+    } else {
+      setMessage({
+        show: true,
+        error: false,
+        content: `Success! Sent friend request to ${displayName}.`,
+      });
+    }
+  }
   return (
     <>
       <div className={styles['container']}>
@@ -25,25 +41,16 @@ export default function FriendAdd(props) {
                 setMessage({ show: false, error: false, content: '' });
               }
             }}
+            onKeyDown={async (e) => {
+              if (e.key === 'Enter') {
+                await sendFriendRequest();
+              }
+            }}
             placeholder={'Enter a username'}
           />
           <button
             onClick={async () => {
-              console.log('attempting friend request');
-              const result = await addFriend(currentUser, displayName);
-              if (!result) {
-                setMessage({
-                  show: true,
-                  error: true,
-                  content: 'User does not exist',
-                });
-              } else {
-                setMessage({
-                  show: true,
-                  error: false,
-                  content: `Success! Sent friend request to ${displayName}.`,
-                });
-              }
+              await sendFriendRequest();
             }}
             className={styles['button']}
           >
