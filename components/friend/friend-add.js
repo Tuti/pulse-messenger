@@ -1,11 +1,11 @@
+import styles from '../../styles/components/friend-add.module.css';
 import { useState } from 'react';
 import { useUser } from '../../context/userContext';
 import { addFriend } from '../../firebase/firestore';
-import styles from '../../styles/components/friend-add.module.css';
 
 export default function FriendAdd(props) {
   const [displayName, setDisplayName] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ error: true, content: '' });
   const currentUser = useUser();
 
   return (
@@ -22,12 +22,13 @@ export default function FriendAdd(props) {
             placeholder={'Enter a username'}
           />
           <button
-            onClick={() => {
+            onClick={async () => {
               console.log('attempting friend request');
-              const result = addFriend(currentUser, displayName);
-
+              const result = await addFriend(currentUser, displayName);
               if (!result) {
-                setMessage('User does not exist');
+                setMessage({ error: true, content: 'User does not exist' });
+              } else {
+                setMessage({ error: false, content: 'Success' });
               }
             }}
             className={styles['button']}
@@ -37,11 +38,11 @@ export default function FriendAdd(props) {
         </div>
         <div
           className={
-            message === ''
+            message.content === '' && message.error
               ? `${styles['hidden']} ${styles['error-message']}`
               : styles['error-message']
           }
-        >{`${message}`}</div>
+        >{`${message.content}`}</div>
       </div>
     </>
   );

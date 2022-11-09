@@ -16,39 +16,22 @@ export const db = getFirestore(app);
 export async function storeUser(userCred, displayName) {
   try {
     await setDoc(doc(db, 'users', `${displayName}`), {
-      displayName: displayName,
-      uid: userCred.user.uid,
-      email: userCred.user.email,
-      timestamp: serverTimestamp(),
-      pendingFriends: [],
-      friends: [],
+      userDetails: {
+        displayName: displayName,
+        uid: userCred.user.uid,
+        email: userCred.user.email,
+        timestamp: serverTimestamp(),
+      },
+      friends: {
+        actual: [],
+        blocked: [],
+        pendingSent: [],
+        pendingReceived: [],
+      },
     });
     console.log('stored user');
   } catch (e) {
     console.log(e);
-  }
-}
-
-export async function userExists(displayName) {
-  let user = '';
-  const usersRef = collection(db, 'users');
-  const displayNameQuery = query(
-    usersRef,
-    where('displayName', '==', `${displayName}`)
-  );
-
-  const snapshot = await getDocs(displayNameQuery);
-  if (snapshot.empty) {
-    console.log('user does not exist');
-    return false;
-  } else {
-    snapshot.forEach((doc) => {
-      if (doc.data().displayName === displayName) {
-        console.log(displayName);
-        user = doc.data();
-      }
-    });
-    return user;
   }
 }
 
@@ -69,23 +52,85 @@ export async function isEmailUsed(email) {
   }
 }
 
+export async function userExists(displayName) {
+  let user = '';
+  const usersRef = collection(db, 'users');
+  const displayNameQuery = query(
+    usersRef,
+    where('userDetails.displayName', '==', `${displayName}`)
+  );
+
+  const snapshot = await getDocs(displayNameQuery);
+  if (snapshot.empty) {
+    console.log('userExists(): false');
+    return false;
+  } else {
+    snapshot.forEach((doc) => {
+      user = doc.data();
+    });
+    return user;
+  }
+}
+
 export async function addFriend(currentUser, displayName) {
-  const user = await userExists(displayName);
-  if (!user.uid) {
-    console.log('failed user exists');
+  //allows us to get current user data
+  const requestingUser = await userExists(currentUser.displayName);
+  const receivingUser = await userExists(displayName);
+
+  //Checks if user exists before proceeding
+  if (!receivingUser) {
     return false;
   }
 
+  receivingUser.friends.pendingReceived.forEach((index) => {
+    if (index.uid === requestingUser.userDetails.uid) {
+      return true;
+    }
+  });
+  // const temp = receivingUser.friends.pendingReceived;
+  // console.log({ temp });
+
+  //Adds friend request to requesting user
   await setDoc(
-    doc(db, 'users', `${currentUser.displayName}`),
+    doc(db, 'users', `${requestingUser.userDetails.displayName}`),
     {
-      pendingFriends: [
-        ...user.pendingFriends,
-        { uid: user.uid, displayName: user.displayName },
-      ],
+      friends: {
+        actual: [...requestingUser.friends.actual],
+        blocked: [...requestingUser.friends.blocked],
+        pendingReceived: [...requestingUser.friends.pendingReceived],
+        pendingSent: [
+          ...requestingUser.friends.pendingSent,
+          {
+            uid: receivingUser.userDetails.uid,
+            displayName: receivingUser.userDetails.displayName,
+          },
+        ],
+      },
     },
     { merge: true }
   );
+
+  //Adds friend request to receiving user
+  await setDoc(
+    doc(db, 'users', `${receivingUser.userDetails.displayName}`),
+    {
+      friends: {
+        actual: [...receivingUser.friends.actual],
+        blocked: [...receivingUser.friends.blocked],
+        pendingSent: [...receivingUser.friends.pendingSent],
+        pendingReceived: [
+          ...receivingUser.friends.pendingReceived,
+          {
+            uid: requestingUser.userDetails.uid,
+            displayName: requestingUser.userDetails.displayName,
+          },
+        ],
+      },
+    },
+    { merge: true }
+  );
+
+  return true;
 }
 
 export async function getFriendList(currentUser) {
