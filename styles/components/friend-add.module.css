@@ -23,6 +23,13 @@
   color: red;
 }
 
+.success-message {
+  display: flex;
+  width: 100%;
+  font-size: 1rem;
+  color: green;
+}
+
 .hidden {
   visibility: hidden;
 }

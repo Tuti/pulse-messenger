@@ -5,7 +5,11 @@ import { addFriend } from '../../firebase/firestore';
 
 export default function FriendAdd(props) {
   const [displayName, setDisplayName] = useState('');
-  const [message, setMessage] = useState({ error: true, content: '' });
+  const [message, setMessage] = useState({
+    show: false,
+    error: false,
+    content: '',
+  });
   const currentUser = useUser();
 
   return (
@@ -17,7 +21,9 @@ export default function FriendAdd(props) {
             value={displayName}
             onChange={(e) => {
               setDisplayName(e.target.value);
-              setMessage('');
+              if (message.content !== '') {
+                setMessage({ show: false, error: false, content: '' });
+              }
             }}
             placeholder={'Enter a username'}
           />
@@ -26,9 +32,17 @@ export default function FriendAdd(props) {
               console.log('attempting friend request');
               const result = await addFriend(currentUser, displayName);
               if (!result) {
-                setMessage({ error: true, content: 'User does not exist' });
+                setMessage({
+                  show: true,
+                  error: true,
+                  content: 'User does not exist',
+                });
               } else {
-                setMessage({ error: false, content: 'Success' });
+                setMessage({
+                  show: true,
+                  error: false,
+                  content: `Success! Sent friend request to ${displayName}.`,
+                });
               }
             }}
             className={styles['button']}
@@ -36,13 +50,12 @@ export default function FriendAdd(props) {
             Send Request
           </button>
         </div>
-        <div
-          className={
-            message.content === '' && message.error
-              ? `${styles['hidden']} ${styles['error-message']}`
-              : styles['error-message']
-          }
-        >{`${message.content}`}</div>
+        {message.show && message.error && (
+          <div className={styles['error-message']}>{message.content}</div>
+        )}
+        {message.show && !message.error && (
+          <div className={styles['success-message']}>{message.content}</div>
+        )}
       </div>
     </>
   );

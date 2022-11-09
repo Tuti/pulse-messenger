@@ -52,7 +52,7 @@ export async function isEmailUsed(email) {
   }
 }
 
-export async function userExists(displayName) {
+export async function getUser(displayName) {
   let user = '';
   const usersRef = collection(db, 'users');
   const displayNameQuery = query(
@@ -74,8 +74,8 @@ export async function userExists(displayName) {
 
 export async function addFriend(currentUser, displayName) {
   //allows us to get current user data
-  const requestingUser = await userExists(currentUser.displayName);
-  const receivingUser = await userExists(displayName);
+  const requestingUser = await getUser(currentUser.displayName);
+  const receivingUser = await getUser(displayName);
 
   //Checks if user exists before proceeding
   if (!receivingUser) {
