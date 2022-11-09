@@ -20,6 +20,8 @@ export async function storeUser(userCred, displayName) {
       uid: userCred.user.uid,
       email: userCred.user.email,
       timestamp: serverTimestamp(),
+      pendingFriends: [],
+      friends: [],
     });
     console.log('stored user');
   } catch (e) {
@@ -28,6 +30,7 @@ export async function storeUser(userCred, displayName) {
 }
 
 export async function userExists(displayName) {
+  let user = '';
   const usersRef = collection(db, 'users');
   const displayNameQuery = query(
     usersRef,
@@ -41,12 +44,12 @@ export async function userExists(displayName) {
   } else {
     snapshot.forEach((doc) => {
       if (doc.data().displayName === displayName) {
-        return { uid: doc.data().uid, displayName: doc.data().displayName };
+        console.log(displayName);
+        user = doc.data();
       }
     });
+    return user;
   }
-
-  return false; //should not ever hit
 }
 
 export async function isEmailUsed(email) {
@@ -73,25 +76,13 @@ export async function addFriend(currentUser, displayName) {
     return false;
   }
 
-  const usersRef = collection(db, 'users');
-  const idQuery = query(usersRef, where('displayName', '==', `${displayName}`));
-  const idSnapshot = await getDocs(idQuery);
-  let friend_uid = '';
-
-  if (idSnapshot.empty) {
-    console.log('empty snapshot');
-    return;
-  } else {
-    idSnapshot.forEach((doc) => {
-      friend_uid = doc.data().uid;
-    });
-  }
-
   await setDoc(
     doc(db, 'users', `${currentUser.displayName}`),
     {
-      displayName: displayName,
-      uid: friend_uid,
+      pendingFriends: [
+        ...user.pendingFriends,
+        { uid: user.uid, displayName: user.displayName },
+      ],
     },
     { merge: true }
   );
