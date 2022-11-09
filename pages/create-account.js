@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase/firebase';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { isEmailUsed, storeUser, userExists } from '../firebase/firestore';
+import { isEmailUsed, storeUser, getUser } from '../firebase/firestore';
 
 export default function Login() {
   const [displayName, setDisplayName] = useState('');
@@ -32,7 +32,7 @@ export default function Login() {
       return;
     }
 
-    const results = await userExists(displayName);
+    const results = await getUser(displayName);
     if (results.uid) {
       setMessage('Username is already in use.');
       return;
