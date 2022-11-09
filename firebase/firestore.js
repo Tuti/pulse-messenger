@@ -82,8 +82,8 @@ export async function addFriend(currentUser, displayName) {
     return false;
   }
 
-  receivingUser.friends.pendingReceived.forEach((index) => {
-    if (index.uid === requestingUser.userDetails.uid) {
+  receivingUser.friends.pendingReceived.forEach((value) => {
+    if (value.uid === requestingUser.userDetails.uid) {
       return true;
     }
   });
