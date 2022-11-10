@@ -6,6 +6,8 @@ export default function ChatTilePreview(props) {
   //TODO:
   //Need to figure out firestore db structure for
   //getting last message of the chat
+  //check kevin powell video for good last message css
+  //so we get elipses thing at end of message
 
   return (
     <div className={styles['info']}>
