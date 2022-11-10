@@ -1,7 +1,7 @@
 import styles from '../../styles/components/friend-add.module.css';
 import { useState } from 'react';
 import { useUser } from '../../context/userContext';
-import { addFriend } from '../../firebase/firestore';
+import { sendFriendRequest } from '../../firebase/firestore';
 
 export default function FriendAdd(props) {
   const currentUser = useUser();
@@ -12,8 +12,8 @@ export default function FriendAdd(props) {
     content: '',
   });
 
-  async function sendFriendRequest() {
-    const result = await addFriend(currentUser, displayName);
+  async function handleRequest() {
+    const result = await sendFriendRequest(currentUser, displayName);
     if (!result) {
       setMessage({
         show: true,
@@ -43,14 +43,14 @@ export default function FriendAdd(props) {
             }}
             onKeyDown={async (e) => {
               if (e.key === 'Enter') {
-                await sendFriendRequest();
+                await handleRequest();
               }
             }}
             placeholder={'Enter a username'}
           />
           <button
             onClick={async () => {
-              await sendFriendRequest();
+              await handleRequest();
             }}
             className={styles['button']}
           >

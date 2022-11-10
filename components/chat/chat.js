@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from '../../styles/components/chat.module.css';
 import ChatCurrent from './chat-current';
 import ChatsList from './chats-list';
-import FriendList from '../friend/friend-list';
+import Friends from '../friend/friends';
 
 export default function Chat() {
   const [chatActive, setChatActive] = useState(true);
@@ -22,8 +22,8 @@ export default function Chat() {
         </div>
       )}
       {friendListActive && (
-        <div className={styles['friend-list']}>
-          <FriendList />
+        <div className={styles['friends']}>
+          <Friends />
         </div>
       )}
     </div>
