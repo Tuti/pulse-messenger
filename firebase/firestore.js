@@ -3,7 +3,6 @@ import {
   doc,
   getFirestore,
   setDoc,
-  getDoc,
   getDocs,
   collection,
   where,
@@ -87,8 +86,6 @@ export async function addFriend(currentUser, displayName) {
       return true;
     }
   });
-  // const temp = receivingUser.friends.pendingReceived;
-  // console.log({ temp });
 
   //Adds friend request to requesting user
   await setDoc(
@@ -133,32 +130,41 @@ export async function addFriend(currentUser, displayName) {
   return true;
 }
 
-export async function getFriendList(currentUser) {
-  const snapshot = await getDocs(
-    collection(db, 'users', `${currentUser.displayName}`, 'friends')
-  );
+export async function acceptFriendRequest(index, currentUser, requestingUser) {
+  //currentuser and requestinguser are
+  //expected to be their displayNames
+  const currentUserData = await getUser(currentUser);
+  const requestingUserData = await getUser(requestingUser);
 
-  if (snapshot.empty) {
-    console.log('empty friend list');
-    return;
-  } else {
-    snapshot.forEach((doc) => {
-      console.log(doc.id);
-    });
-  }
-}
+  //Accepts request on receiving user end
+  let pendingReceived = currentUserData.friends.pendingReceived;
+  let friends = currentUserData.friends.actual;
+  let friend = pendingReceived[index];
 
-export async function getPendingFriendRequests(currentUser) {
-  const snapshot = await getDocs(
-    collection(db, 'users', `${currentUser.displayName}`, 'pending-friends')
-  );
-
-  if (snapshot.empty) {
-    console.log('empty pending requests list');
+  if (!currentUserData) {
     return false;
-  } else {
-    snapshot.forEach((doc) => {
-      console.log(doc.id, ' => ', doc.data());
-    });
   }
+
+  //Removes pending friend request
+  pendingReceived.splice(index, 1);
+  friends.push(friend);
+
+  await setDoc(doc(db, 'users', `${currentUser}`), {
+    friends: {
+      actual: [...friends],
+      blocked: [...currentUserData.friends.blocked],
+      pendingSent: [...currentUserData.friends.pendingSent],
+      pendingReceived: [...pendingReceived],
+    },
+  });
+
+  let pendingSent = requestingUserData.friends.pendingSent;
+  pendingSent.forEach((value, index) => {
+    if (value.displayName === requestingUser) {
+      friend = value;
+    }
+  });
+  friends = requestingUserData.friends.actual;
+
+  return true;
 }
