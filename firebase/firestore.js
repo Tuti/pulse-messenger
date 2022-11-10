@@ -133,18 +133,17 @@ export async function sendFriendRequest(currentUser, displayName) {
   return true;
 }
 
-export async function acceptFriendRequest(index, currentUser, requestingUser) {
+export async function acceptFriendRequest(index, userData, requestingUser) {
   //currentuser and requestinguser are
   //expected to be their displayNames
-  const receivingUserData = await getUser(currentUser);
   const requestingUserData = await getUser(requestingUser);
 
   //Accepts request on receiving user end
-  let pendingReceived = receivingUserData.friends.pendingReceived;
-  let friends = receivingUserData.friends.actual;
+  let pendingReceived = userData.friends.pendingReceived;
+  let friends = userData.friends.actual;
   let friend = pendingReceived[index];
 
-  if (!receivingUserData && !requestingUserData) {
+  if (!requestingUserData) {
     return false;
   }
 
@@ -153,12 +152,12 @@ export async function acceptFriendRequest(index, currentUser, requestingUser) {
   friends.push(friend);
 
   await setDoc(
-    doc(db, 'users', `${currentUser}`),
+    doc(db, 'users', `${userData.userDetails.displayName}`),
     {
       friends: {
         actual: [...friends],
-        blocked: [...receivingUserData.friends.blocked],
-        pendingSent: [...receivingUserData.friends.pendingSent],
+        blocked: [...userData.friends.blocked],
+        pendingSent: [...userData.friends.pendingSent],
         pendingReceived: [...pendingReceived],
       },
     },
@@ -171,7 +170,7 @@ export async function acceptFriendRequest(index, currentUser, requestingUser) {
   let pendingSent = requestingUserData.friends.pendingSent;
   friends = requestingUserData.friends.actual;
   for (let i = 0; i < pendingSent.length; i++) {
-    if (pendingSent[i].displayName === currentUser) {
+    if (pendingSent[i].displayName === userData.userDetails.displayName) {
       friends.push(friend);
       pendingSent.splice(pendingSentIndex, 1);
     }
@@ -192,3 +191,5 @@ export async function acceptFriendRequest(index, currentUser, requestingUser) {
 
   return true;
 }
+
+export async function declineFriendRequest() {}

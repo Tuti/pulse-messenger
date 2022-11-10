@@ -23,7 +23,7 @@ export default function PendingUsercard(props) {
             console.log('displayname: ', `${currentUser.displayName}`);
             const results = await acceptFriendRequest(
               props.index,
-              currentUser.displayName,
+              props.userData,
               requestingUser.displayName
             );
             console.log({ results });
