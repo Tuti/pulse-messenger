@@ -1,3 +1,4 @@
+import { BsChatDots } from 'react-icons/bs';
 import styles from '../../styles/components/chats-list.module.css';
 import ChatTilePreview from './chat-tile-preview';
 
@@ -35,6 +36,8 @@ export default function ChatsList(props) {
     );
   });
 
+  function handleNewChat() {}
+
   function handleFriendClick() {
     props.setFriendListActive(true);
     props.setChatActive(false);
@@ -43,8 +46,13 @@ export default function ChatsList(props) {
   return (
     <>
       <div className={styles['tiles']}>
-        <div onClick={handleFriendClick} className={styles['friends-button']}>
-          {'Friends'}
+        <div className={styles['buttons']}>
+          <button onClick={handleNewChat} className={styles['start-chat']}>
+            <BsChatDots size={'1.5rem'} />
+          </button>
+          <button onClick={handleFriendClick} className={styles['friends']}>
+            {'Friends'}
+          </button>
         </div>
         {chatTiles.length == 0 && (
           <div className={styles['empty-list']}>{'no messages yet... :('}</div>

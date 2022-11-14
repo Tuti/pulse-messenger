@@ -19,7 +19,7 @@ export default function FriendList(props) {
       </div>
       <h2
         className={styles['sub-heading']}
-      >{`Friends - ${friendCards.length}`}</h2>
+      >{`Friends - ${friendCards?.length}`}</h2>
       <div className={styles['friend-cards']}>{friendCards}</div>
     </div>
   );

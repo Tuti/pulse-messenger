@@ -7,29 +7,29 @@ export default function ChatMessages() {
   //IF LOGGED IN TO ACCOUNT OTHER THAN TUTI
   //WILL NOT WORK CORRECTLY
   //REMEMBER
-  // const testMessages = [
-  //   {
-  //     displayName: 'user1',
-  //     message: 'this is a test message',
-  //     timestamp: '7:00am',
-  //   },
-  //   {
-  //     displayName: 'tuti',
-  //     message:
-  //       'this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message ',
-  //     timestamp: '7:00am',
-  //   },
-  //   {
-  //     displayName: 'user1',
-  //     message: 'this is a test message',
-  //     timestamp: '7:00am',
-  //   },
-  //   {
-  //     displayName: 'tuti',
-  //     message: 'this is a test message',
-  //     timestamp: '7:00am',
-  //   },
-  // ];
+  const testMessages = [
+    {
+      displayName: 'user1',
+      message: 'this is a test message',
+      timestamp: '7:00am',
+    },
+    {
+      displayName: 'tuti',
+      message:
+        'this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message ',
+      timestamp: '7:00am',
+    },
+    {
+      displayName: 'user1',
+      message: 'this is a test message',
+      timestamp: '7:00am',
+    },
+    {
+      displayName: 'tuti',
+      message: 'this is a test message',
+      timestamp: '7:00am',
+    },
+  ];
 
   const chatHistory = testMessages.map((value, index) => {
     if (value.displayName !== currentUser.displayName) {
