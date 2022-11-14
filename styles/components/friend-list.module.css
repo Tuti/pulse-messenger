@@ -1,3 +1,7 @@
+.list {
+  margin: 1rem;
+}
+
 .search {
   display: flex;
   gap: 0.5rem;
@@ -7,6 +11,44 @@
 
 #search {
   padding: 0.5rem;
-  margin: 1rem;
   width: 100%;
+}
+
+.sub-heading {
+  display: flex;
+  margin: 0;
+  padding: 1rem;
+  border-bottom: 1px solid gray;
+}
+
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid gray;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  height: clamp(20px, 10vh, 40px);
+  font-size: 1.5rem;
+}
+
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  height: 100%;
+}
+
+.displayName {
+  font-size: 1.5rem;
 }

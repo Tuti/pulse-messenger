@@ -25,6 +25,7 @@ export default function Login() {
     const emailUsed = await isEmailUsed(email);
     if (emailUsed) {
       setMessage('Email is already in use');
+      return;
     }
 
     if (password !== confirmpass) {

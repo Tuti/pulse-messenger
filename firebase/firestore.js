@@ -36,7 +36,10 @@ export async function storeUser(userCred, displayName) {
 
 export async function isEmailUsed(email) {
   const usersRef = collection(db, 'users');
-  const emailQuery = query(usersRef, where('email', '==', `${email}`));
+  const emailQuery = query(
+    usersRef,
+    where('userDetails.email', '==', `${email}`)
+  );
   const snapshot = await getDocs(emailQuery);
 
   console.log('checking email');
@@ -105,9 +108,8 @@ export async function sendFriendRequest(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
       friends: {
-        actual: [...currentUserData.friends.actual],
-        blocked: [...currentUserData.friends.blocked],
-        pendingReceived: [...currentUserData.friends.pendingReceived],
+        ...currentUserData.friends,
+
         pendingSent: [
           ...currentUserData.friends.pendingSent,
           {
@@ -187,6 +189,11 @@ export async function acceptFriendRequest(
   let pendingSentIndex = -1;
   let pendingSent = requestingUserData.friends.pendingSent;
   friends = requestingUserData.friends.actual;
+  friend = {
+    uid: currentUserData.userDetails.uid,
+    displayName: currentUserData.userDetails.displayName,
+  };
+
   for (let i = 0; i < pendingSent.length; i++) {
     if (
       pendingSent[i].displayName === currentUserData.userDetails.displayName
@@ -198,7 +205,7 @@ export async function acceptFriendRequest(
   }
 
   await setDoc(
-    doc(db, 'users', `${requestingUser}`),
+    doc(db, 'users', `${requestingUserData.userDetails.displayName}`),
     {
       friends: {
         ...requestingUserData.friends,

@@ -28,7 +28,7 @@ export default function Friends(props) {
   return (
     <>
       <FriendNavbar setActivePanel={setActivePanel} />
-      {activePanel === 'all-list' && <FriendList />}
+      {activePanel === 'all-list' && <FriendList userData={userData} />}
       {/* may want to consider just passing exact data, ex: pendingReceived */}
       {activePanel === 'pending' && <FriendPending userData={userData} />}
       {activePanel === 'blocked' && <>{'blocked TODO'}</>}
