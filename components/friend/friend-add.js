@@ -1,10 +1,9 @@
 import styles from '../../styles/components/friend-add.module.css';
 import { useState } from 'react';
-import { useUser } from '../../context/userContext';
 import { sendFriendRequest } from '../../firebase/firestore';
 
 export default function FriendAdd(props) {
-  const currentUser = useUser();
+  const currentUserData = props.userData;
   const [displayName, setDisplayName] = useState('');
   const [message, setMessage] = useState({
     show: false,
@@ -13,12 +12,12 @@ export default function FriendAdd(props) {
   });
 
   async function handleRequest() {
-    const result = await sendFriendRequest(currentUser, displayName);
-    if (!result) {
+    const result = await sendFriendRequest(currentUserData, displayName);
+    if (!result.success) {
       setMessage({
         show: true,
         error: true,
-        content: 'User does not exist',
+        content: result.message,
       });
     } else {
       setMessage({

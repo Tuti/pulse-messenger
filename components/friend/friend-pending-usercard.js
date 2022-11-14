@@ -1,9 +1,10 @@
 import styles from '../../styles/components/friend-pending-usercard.module.css';
 import { BsX, BsCheck2 } from 'react-icons/bs';
-import { acceptFriendRequest } from '../../firebase/firestore';
-import { useUser } from '../../context/userContext';
+import {
+  acceptFriendRequest,
+  declineFriendRequest,
+} from '../../firebase/firestore';
 export default function PendingUsercard(props) {
-  const currentUser = useUser();
   const requestingUser = props.value;
 
   return (
@@ -20,7 +21,6 @@ export default function PendingUsercard(props) {
         <button
           className={styles['accept-button']}
           onClick={async () => {
-            console.log('displayname: ', `${currentUser.displayName}`);
             const results = await acceptFriendRequest(
               props.index,
               props.userData,
@@ -34,7 +34,12 @@ export default function PendingUsercard(props) {
         <button
           className={styles['decline-button']}
           onClick={async () => {
-            declineRequest(props.index);
+            const results = await declineFriendRequest(
+              props.index,
+              props.userData,
+              requestingUser.displayName
+            );
+            console.log({ results });
           }}
         >
           <BsX size={'1.5rem'} />

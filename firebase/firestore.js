@@ -71,38 +71,48 @@ export async function getUser(displayName) {
   }
 }
 
-export async function sendFriendRequest(currentUser, displayName) {
+export async function sendFriendRequest(
+  currentUserData,
+  receivingUserDisplayName
+) {
   //allows us to get current user data
-  const requestingUser = await getUser(currentUser.displayName);
-  const receivingUser = await getUser(displayName);
+  const receivingUserData = await getUser(receivingUserDisplayName);
 
   //Checks if user exists before proceeding
-  if (!receivingUser) {
-    return false;
+  if (!receivingUserData) {
+    return { success: false, message: 'User does not exist' };
   }
 
+  if (currentUserData.userDetails.displayName === receivingUserDisplayName) {
+    return {
+      success: false,
+      message: "You can't send a friend request to yourself!",
+    };
+  }
   //check if receieving user already has a
   //request from requesting user
-  for (const element of receivingUser.friends.pendingReceived) {
-    if (element.uid === requestingUser.userDetails.uid) {
-      console.log('already requested');
-      return true;
+  for (const element of receivingUserData.friends.pendingReceived) {
+    if (element.uid === currentUserData.userDetails.uid) {
+      return {
+        success: false,
+        message: 'You have already sent a request to this user',
+      };
     }
   }
 
   //Adds friend request to requesting user
   await setDoc(
-    doc(db, 'users', `${requestingUser.userDetails.displayName}`),
+    doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
       friends: {
-        actual: [...requestingUser.friends.actual],
-        blocked: [...requestingUser.friends.blocked],
-        pendingReceived: [...requestingUser.friends.pendingReceived],
+        actual: [...currentUserData.friends.actual],
+        blocked: [...currentUserData.friends.blocked],
+        pendingReceived: [...currentUserData.friends.pendingReceived],
         pendingSent: [
-          ...requestingUser.friends.pendingSent,
+          ...currentUserData.friends.pendingSent,
           {
-            uid: receivingUser.userDetails.uid,
-            displayName: receivingUser.userDetails.displayName,
+            uid: receivingUserData.userDetails.uid,
+            displayName: receivingUserData.userDetails.displayName,
           },
         ],
       },
@@ -112,17 +122,15 @@ export async function sendFriendRequest(currentUser, displayName) {
 
   //Adds friend request to receiving user
   await setDoc(
-    doc(db, 'users', `${receivingUser.userDetails.displayName}`),
+    doc(db, 'users', `${receivingUserData.userDetails.displayName}`),
     {
       friends: {
-        actual: [...receivingUser.friends.actual],
-        blocked: [...receivingUser.friends.blocked],
-        pendingSent: [...receivingUser.friends.pendingSent],
+        ...receivingUserData.friends,
         pendingReceived: [
-          ...receivingUser.friends.pendingReceived,
+          ...receivingUserData.friends.pendingReceived,
           {
-            uid: requestingUser.userDetails.uid,
-            displayName: requestingUser.userDetails.displayName,
+            uid: currentUserData.userDetails.uid,
+            displayName: currentUserData.userDetails.displayName,
           },
         ],
       },
@@ -130,17 +138,28 @@ export async function sendFriendRequest(currentUser, displayName) {
     { merge: true }
   );
 
-  return true;
+  return {
+    success: true,
+    message: `Success! test Sent friend request to ${receivingUserData.userDetails.displayName}.`,
+  };
 }
 
-export async function acceptFriendRequest(index, userData, requestingUser) {
-  //currentuser and requestinguser are
-  //expected to be their displayNames
-  const requestingUserData = await getUser(requestingUser);
+export async function acceptFriendRequest(
+  index,
+  currentUserData,
+  requestingUserDisplayName
+) {
+  //(current logged in) userData is supplied by the
+  //ongoing subscription to firestore and is expected to
+  //be valid
+  //requestingUser is expected to be the displayName
+  //of requesting user. This will be used
+  //to get their data and confirm they exists.
+  const requestingUserData = await getUser(requestingUserDisplayName);
 
   //Accepts request on receiving user end
-  let pendingReceived = userData.friends.pendingReceived;
-  let friends = userData.friends.actual;
+  let pendingReceived = currentUserData.friends.pendingReceived;
+  let friends = currentUserData.friends.actual;
   let friend = pendingReceived[index];
 
   if (!requestingUserData) {
@@ -152,12 +171,11 @@ export async function acceptFriendRequest(index, userData, requestingUser) {
   friends.push(friend);
 
   await setDoc(
-    doc(db, 'users', `${userData.userDetails.displayName}`),
+    doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
       friends: {
+        ...currentUserData.friends,
         actual: [...friends],
-        blocked: [...userData.friends.blocked],
-        pendingSent: [...userData.friends.pendingSent],
         pendingReceived: [...pendingReceived],
       },
     },
@@ -170,9 +188,12 @@ export async function acceptFriendRequest(index, userData, requestingUser) {
   let pendingSent = requestingUserData.friends.pendingSent;
   friends = requestingUserData.friends.actual;
   for (let i = 0; i < pendingSent.length; i++) {
-    if (pendingSent[i].displayName === userData.userDetails.displayName) {
+    if (
+      pendingSent[i].displayName === currentUserData.userDetails.displayName
+    ) {
       friends.push(friend);
       pendingSent.splice(pendingSentIndex, 1);
+      break;
     }
   }
 
@@ -180,10 +201,9 @@ export async function acceptFriendRequest(index, userData, requestingUser) {
     doc(db, 'users', `${requestingUser}`),
     {
       friends: {
+        ...requestingUserData.friends,
         actual: [...friends],
-        blocked: [...requestingUserData.friends.blocked],
         pendingSent: [...pendingSent],
-        pendingReceived: [...requestingUserData.friends.pendingReceived],
       },
     },
     { merge: true }
@@ -192,4 +212,58 @@ export async function acceptFriendRequest(index, userData, requestingUser) {
   return true;
 }
 
-export async function declineFriendRequest() {}
+export async function declineFriendRequest(
+  index,
+  currentUserData,
+  requestingUser
+) {
+  const requestingUserData = await getUser(requestingUser);
+
+  if (
+    !requestingUserData ||
+    currentUserData.friends.pendingReceived[index].displayName !==
+      requestingUser
+  ) {
+    return false;
+  }
+
+  //Beginning of updating curretUserData
+  //Removes requesting user from pending requests
+  let pendingReceived = currentUserData.friends.pendingReceived;
+  pendingReceived.splice(index, 1);
+
+  await setDoc(
+    doc(db, 'users', `${currentUserData.userDetails.displayName}`),
+    {
+      friends: {
+        ...currentUserData.friends,
+        pendingReceived: [...pendingReceived],
+      },
+    },
+    { merge: true }
+  );
+
+  //Beginning of updating requestingUserData
+  let pendingSent = requestingUserData.friends.pendingSent;
+  for (let i = 0; i < pendingSent.length; i++) {
+    if (
+      pendingSent[i].displayName === currentUserData.userDetails.displayName
+    ) {
+      pendingSent.splice(i, 1);
+      break;
+    }
+  }
+  console.log({ pendingSent });
+  await setDoc(
+    doc(db, 'users', `${requestingUserData.userDetails.displayName}`),
+    {
+      friends: {
+        ...requestingUserData.friends,
+        pendingSent: [...pendingSent],
+      },
+    },
+    { merge: true }
+  );
+
+  return true;
+}

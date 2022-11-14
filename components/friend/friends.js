@@ -32,7 +32,7 @@ export default function Friends(props) {
       {/* may want to consider just passing exact data, ex: pendingReceived */}
       {activePanel === 'pending' && <FriendPending userData={userData} />}
       {activePanel === 'blocked' && <>{'blocked TODO'}</>}
-      {activePanel === 'add-friend' && <FriendAdd />}
+      {activePanel === 'add-friend' && <FriendAdd userData={userData} />}
     </>
   );
 }
