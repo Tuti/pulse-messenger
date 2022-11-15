@@ -8,31 +8,16 @@ import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../../firebase/firestore';
 
 export default function Friends(props) {
-  const currentUser = useUser();
   const [activePanel, setActivePanel] = useState('all-list');
-  const [userData, setUserData] = useState();
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      doc(db, 'users', `${currentUser.displayName}`),
-      (doc) => {
-        setUserData(doc.data());
-      }
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
 
   return (
     <>
       <FriendNavbar setActivePanel={setActivePanel} />
-      {activePanel === 'all-list' && <FriendList userData={userData} />}
+      {activePanel === 'all-list' && <FriendList userData={props.userData} />}
       {/* may want to consider just passing exact data, ex: pendingReceived */}
-      {activePanel === 'pending' && <FriendPending userData={userData} />}
+      {activePanel === 'pending' && <FriendPending userData={props.userData} />}
       {activePanel === 'blocked' && <>{'blocked TODO'}</>}
-      {activePanel === 'add-friend' && <FriendAdd userData={userData} />}
+      {activePanel === 'add-friend' && <FriendAdd userData={props.userData} />}
     </>
   );
 }

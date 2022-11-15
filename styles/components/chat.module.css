@@ -30,7 +30,12 @@
   justify-content: flex-end;
   border: 1px solid #00b4d8;
 }
-
+.start-new {
+  grid-area: chat;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #00b4d8;
+}
 .friends {
   grid-area: chat;
   display: flex;

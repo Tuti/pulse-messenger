@@ -7,6 +7,7 @@ import {
   collection,
   where,
   serverTimestamp,
+  addDoc,
 } from 'firebase/firestore';
 import { app } from './firebase';
 
@@ -273,4 +274,52 @@ export async function declineFriendRequest(
   );
 
   return true;
+}
+
+export async function startNewChat(currentUserData, displayName) {
+  const otherUserData = await getUser(displayName);
+
+  if (!otherUserData) {
+    console.log('start chat fails');
+    return false;
+  }
+
+  const users = [
+    {
+      uid: currentUserData.userDetails.uid,
+      displayName: currentUserData.userDetails.displayName,
+    },
+    {
+      uid: otherUserData.userDetails.uid,
+      displayName: otherUserData.userDetails.displayName,
+    },
+  ];
+
+  const chatRef = await addDoc(collection(db, 'chats'), {
+    chatName: '',
+    users: [...users],
+    messages: [],
+  });
+
+  await setDoc(
+    doc(db, 'users', `${currentUserData.userDetails.displayName}`),
+    {
+      chats: [
+        ...currentUserData.chats,
+        { chatId: chatRef.id, users: [...users] },
+      ],
+    },
+    { merge: true }
+  );
+
+  await setDoc(
+    doc(db, 'users', `${otherUserData.userDetails.displayName}`),
+    {
+      chats: [
+        ...otherUserData.chats,
+        { chatId: chatRef.id, users: [...users] },
+      ],
+    },
+    { merge: true }
+  );
 }

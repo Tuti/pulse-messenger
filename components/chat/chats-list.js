@@ -36,11 +36,16 @@ export default function ChatsList(props) {
     );
   });
 
-  function handleNewChat() {}
+  function handleNewChat() {
+    props.setChatNewActive(true);
+    props.setChatActive(false);
+    props.setFriendListActive(false);
+  }
 
   function handleFriendClick() {
     props.setFriendListActive(true);
     props.setChatActive(false);
+    props.setChatNewActive(false);
   }
 
   return (
