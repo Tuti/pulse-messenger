@@ -65,13 +65,12 @@ export async function getUser(displayName) {
 
   const snapshot = await getDocs(displayNameQuery);
   if (snapshot.empty) {
-    console.log('userExists(): false');
-    return false;
+    return { success: false, message: 'user does not exist' };
   } else {
     snapshot.forEach((doc) => {
       user = doc.data();
     });
-    return user;
+    return { success: true, data: user };
   }
 }
 
@@ -80,12 +79,13 @@ export async function sendFriendRequest(
   receivingUserDisplayName
 ) {
   //allows us to get current user data
-  const receivingUserData = await getUser(receivingUserDisplayName);
+  const results = await getUser(receivingUserDisplayName);
 
   //Checks if user exists before proceeding
-  if (!receivingUserData) {
-    return { success: false, message: 'User does not exist' };
+  if (!results.success) {
+    return results;
   }
+  const receivingUserData = results.data;
 
   if (currentUserData.userDetails.displayName === receivingUserDisplayName) {
     return {
@@ -158,16 +158,17 @@ export async function acceptFriendRequest(
   //requestingUser is expected to be the displayName
   //of requesting user. This will be used
   //to get their data and confirm they exists.
-  const requestingUserData = await getUser(requestingUserDisplayName);
+  const results = await getUser(requestingUserDisplayName);
 
+  if (!results.success) {
+    return results;
+  }
+
+  const requestingUserData = results.data;
   //Accepts request on receiving user end
   let pendingReceived = currentUserData.friends.pendingReceived;
   let friends = currentUserData.friends.actual;
   let friend = pendingReceived[index];
-
-  if (!requestingUserData) {
-    return false;
-  }
 
   //Removes pending friend request
   pendingReceived.splice(index, 1);
@@ -225,16 +226,17 @@ export async function declineFriendRequest(
   currentUserData,
   requestingUser
 ) {
-  const requestingUserData = await getUser(requestingUser);
+  const results = await getUser(requestingUser);
 
   if (
-    !requestingUserData ||
+    !results.success ||
     currentUserData.friends.pendingReceived[index].displayName !==
       requestingUser
   ) {
-    return false;
+    return requestingUserData;
   }
 
+  const requestingUserData = results.data;
   //Beginning of updating curretUserData
   //Removes requesting user from pending requests
   let pendingReceived = currentUserData.friends.pendingReceived;
@@ -277,13 +279,13 @@ export async function declineFriendRequest(
 }
 
 export async function startNewChat(currentUserData, displayName) {
-  const otherUserData = await getUser(displayName);
+  const results = await getUser(displayName);
 
-  if (!otherUserData) {
-    console.log('start chat fails');
-    return false;
+  if (!results.success) {
+    return results;
   }
 
+  const otherUserData = results.data;
   const users = [
     {
       uid: currentUserData.userDetails.uid,
@@ -302,7 +304,10 @@ export async function startNewChat(currentUserData, displayName) {
   });
 
   const currentUserChats = new Map(Object.entries(currentUserData.chats));
-  currentUserChats.set(chatRef.id, [...users]);
+  currentUserChats.set(otherUserData.userDetails.displayName, {
+    chatId: chatRef.id,
+    users: [...users],
+  });
 
   await setDoc(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
@@ -312,14 +317,19 @@ export async function startNewChat(currentUserData, displayName) {
     { merge: true }
   );
 
+  const otherUserChats = new Map(Object.entries(otherUserData.chats));
+  otherUserChats.set(currentUserData.userDetails.displayName, {
+    chatId: chatRef.id,
+    users: [...users],
+  });
+
   await setDoc(
     doc(db, 'users', `${otherUserData.userDetails.displayName}`),
     {
-      chats: [
-        ...otherUserData.chats,
-        { chatId: chatRef.id, users: [...users] },
-      ],
+      chats: Object.fromEntries(otherUserChats),
     },
     { merge: true }
   );
+
+  return { success: true, message: 'started new chat' };
 }

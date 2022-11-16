@@ -7,7 +7,7 @@ export default function ChatCurrent(props) {
   // const messages = props.messages;
 
   return (
-    <>
+    <div className={styles['container']}>
       <div className={styles['message-history']}>
         <ChatMessages />
       </div>
@@ -15,6 +15,6 @@ export default function ChatCurrent(props) {
         <input className={styles['user-input']} />
         <button className={styles['send']}>send</button>
       </div>
-    </>
+    </div>
   );
 }

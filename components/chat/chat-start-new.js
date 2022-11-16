@@ -1,26 +1,31 @@
 import { useState } from 'react';
 import { startNewChat } from '../../firebase/firestore';
 import styles from '../../styles/components/chat-start-new.module.css';
+import ChatCurrent from './chat-current';
 
 export default function ChatStartNew(props) {
   const [input, setInput] = useState('');
   const currentUserData = props.userData;
-  function handleClick() {
+
+  async function handleClick() {
     if (input !== '') {
-      startNewChat(currentUserData, input);
+      const results = await startNewChat(currentUserData, input);
+      console.log({ results });
     }
   }
 
   return (
     <div className={styles['container']}>
-      <input
-        placeholder="Name"
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-      />
-      <button onClick={handleClick}>Send</button>
+      <div className={styles['input-username']}>
+        <input
+          placeholder="Enter Username"
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
+        />
+      </div>
+      <ChatCurrent />
     </div>
   );
 }

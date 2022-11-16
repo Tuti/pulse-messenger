@@ -37,21 +37,11 @@ export default function Chat() {
           setFriendListActive={setFriendListActive}
         />
       </div>
-      {chatActive && (
-        <div className={styles['current']}>
-          <ChatCurrent />
-        </div>
-      )}
-      {chatNewActive && (
-        <div className={styles['start-new']}>
-          <ChatStartNew userData={userData} />
-        </div>
-      )}
-      {friendListActive && (
-        <div className={styles['friends']}>
-          <Friends userData={userData} />
-        </div>
-      )}
+      <div className={styles['active-panel']}>
+        {chatActive && <ChatCurrent />}
+        {chatNewActive && <ChatStartNew userData={userData} />}
+        {friendListActive && <Friends userData={userData} />}
+      </div>
     </div>
   );
 }

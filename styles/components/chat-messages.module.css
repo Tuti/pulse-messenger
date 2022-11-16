@@ -5,7 +5,7 @@
   display: flex;
   flex: 1;
   flex-direction: row-reverse;
-  margin: 1rem;
+  /* margin: 1rem; */
 }
 
 .sent-bg {
@@ -16,7 +16,7 @@
 .received {
   display: flex;
   flex: 1;
-  margin: 1rem;
+  /* margin: 1rem; */
 }
 
 .received-bg {
