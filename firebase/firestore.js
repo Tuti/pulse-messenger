@@ -301,13 +301,13 @@ export async function startNewChat(currentUserData, displayName) {
     messages: [],
   });
 
+  const currentUserChats = new Map(Object.entries(currentUserData.chats));
+  currentUserChats.set(chatRef.id, [...users]);
+
   await setDoc(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
-      chats: [
-        ...currentUserData.chats,
-        { chatId: chatRef.id, users: [...users] },
-      ],
+      chats: Object.fromEntries(currentUserChats),
     },
     { merge: true }
   );
