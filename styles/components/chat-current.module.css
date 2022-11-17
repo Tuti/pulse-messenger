@@ -2,25 +2,5 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin-bottom: 1rem;
-}
-.message-history {
-  display: flex;
-  flex-direction: column-reverse;
-  flex: 1;
-}
-
-.input {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.user-input {
-  padding: 0.5rem;
-  width: 88%;
-}
-
-.send {
-  padding: 0px 1rem;
+  margin: 1rem;
 }
