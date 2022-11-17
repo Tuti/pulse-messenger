@@ -1,37 +1,50 @@
-import { BsChatDots } from 'react-icons/bs';
 import styles from '../../styles/components/chats-list.module.css';
 import ChatTilePreview from './chat-tile-preview';
+import { useUser } from '../../context/userContext';
+import { BsChatDots } from 'react-icons/bs';
 
 export default function ChatsList(props) {
-  //TODO
-  //const chats = props.chats;
+  const currentUser = useUser();
+  const chats = props.chats;
+  // TEST DATA
+  // const chats = [
+  //   {
+  //     username: 'username1',
+  //     lastMessage: 'this is a test message',
+  //   },
+  //   {
+  //     username: 'username2',
+  //     lastMessage: 'this is a test message',
+  //   },
+  //   {
+  //     username: 'username3',
+  //     lastMessage: 'this is a test message',
+  //   },
+  //   {
+  //     username: 'username4',
+  //     lastMessage: 'this is a test message',
+  //   },
+  // ];
 
-  //TEST DATA
-  const chats = [
-    {
-      username: 'username1',
-      lastMessage: 'this is a test message',
-    },
-    {
-      username: 'username2',
-      lastMessage: 'this is a test message',
-    },
-    {
-      username: 'username3',
-      lastMessage: 'this is a test message',
-    },
-    {
-      username: 'username4',
-      lastMessage: 'this is a test message',
-    },
-  ];
+  const chatTiles = chats.map((doc, index) => {
+    console.log('doc', { doc });
+    function getUsername(doc) {
+      for (const user of doc.users) {
+        if (currentUser.displayName !== user) {
+          return user;
+        }
+      }
+    }
 
-  const chatTiles = chats.map((value, index) => {
+    // function getLastMessage() {
+    //   return doc.messages[doc.messages.length - 1].content;
+    // }
+
     return (
       <ChatTilePreview
-        key={value.username}
-        username={value.username}
-        lastMessage={value.lastMessage}
+        key={index}
+        username={getUsername(doc)}
+        lastMessage={'last message'}
       />
     );
   });

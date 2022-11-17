@@ -30,6 +30,7 @@ export default function ChatStartNew(props) {
             setInput(e.target.value);
           }}
         />
+        <button onClick={handleClick}>click me</button>
       </div>
       <ChatMessages />
       <ChatMessageinput />

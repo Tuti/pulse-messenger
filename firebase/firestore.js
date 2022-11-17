@@ -287,14 +287,8 @@ export async function startNewChat(currentUserData, displayName) {
 
   const otherUserData = results.data;
   const users = [
-    {
-      uid: currentUserData.userDetails.uid,
-      displayName: currentUserData.userDetails.displayName,
-    },
-    {
-      uid: otherUserData.userDetails.uid,
-      displayName: otherUserData.userDetails.displayName,
-    },
+    currentUserData.userDetails.displayName,
+    otherUserData.userDetails.displayName,
   ];
 
   const chatRef = await addDoc(collection(db, 'chats'), {

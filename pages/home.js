@@ -5,7 +5,6 @@ import { useUser } from '../context/userContext';
 
 export default function Home() {
   const currentUser = useUser();
-
   return (
     <>
       {!currentUser && (
