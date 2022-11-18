@@ -1,39 +1,70 @@
 import styles from '../../styles/components/chat-start-new.module.css';
-import ChatCurrent from './chat-current';
-import ChatMessageinput from './chat-message-input';
 import ChatMessages from './chat-messages';
 import { BsPencilSquare } from 'react-icons/bs';
 import { useState } from 'react';
-import { startNewChat } from '../../firebase/firestore';
+import { getUser, sendMessage, startNewChat } from '../../firebase/firestore';
 
 export default function ChatStartNew(props) {
-  const [input, setInput] = useState('');
   const currentUserData = props.userData;
+  const [userNameInput, setUserNameInput] = useState('');
+  const [messageInput, setMessageInput] = useState('');
+  const [otherUser, setOtherUser] = useState();
 
-  async function handleClick() {
-    if (input !== '') {
-      const results = await startNewChat(currentUserData, input);
-      console.log({ results });
+  async function startChatandSendMessage() {
+    if (!otherUser) {
+      return;
     }
+    const newChat = await startNewChat(currentUserData, otherUser);
+    const result = await sendMessage(newChat.id, currentUserData, messageInput);
   }
 
   return (
     <div className={styles['container']}>
       <div className={styles['input-username']}>
-        {/* <div className={styles['wrapper']}>
-          <BsPencilSquare size={'1.5rem'} />
-        </div> */}
         <input
           placeholder="Enter Username"
-          value={input}
+          value={userNameInput}
           onChange={(e) => {
-            setInput(e.target.value);
+            setUserNameInput(e.target.value);
+          }}
+          onBlur={async () => {
+            if (
+              userNameInput === '' ||
+              userNameInput === currentUserData.userDetails.displayName
+            ) {
+              //TODO
+              //show message and change css
+              //can't start convo with self
+              return;
+            }
+
+            const result = await getUser(userNameInput);
+            if (!result.success) {
+              //TODO
+              //show message and change css to show error
+              setOtherUser(null);
+              console.log('no user');
+              return;
+            }
+            console.log('got user');
+            setOtherUser(result.data);
           }}
         />
-        <button onClick={handleClick}>click me</button>
       </div>
       <ChatMessages />
-      <ChatMessageinput />
+      <div className={styles['input']}>
+        <input
+          className={styles['user-input']}
+          placeholder={'Type your message'}
+          value={messageInput}
+          onChange={(e) => {
+            setMessageInput(e.target.value);
+          }}
+        />
+        <button className={styles['send']} onClick={startChatandSendMessage}>
+          send
+        </button>
+      </div>
     </div>
   );
 }

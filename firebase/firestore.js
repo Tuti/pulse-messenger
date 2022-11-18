@@ -8,6 +8,8 @@ import {
   where,
   serverTimestamp,
   addDoc,
+  getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { app } from './firebase';
 
@@ -174,6 +176,7 @@ export async function acceptFriendRequest(
   pendingReceived.splice(index, 1);
   friends.push(friend);
 
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
@@ -206,6 +209,7 @@ export async function acceptFriendRequest(
     }
   }
 
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${requestingUserData.userDetails.displayName}`),
     {
@@ -242,6 +246,7 @@ export async function declineFriendRequest(
   let pendingReceived = currentUserData.friends.pendingReceived;
   pendingReceived.splice(index, 1);
 
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
@@ -264,6 +269,8 @@ export async function declineFriendRequest(
     }
   }
   console.log({ pendingSent });
+
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${requestingUserData.userDetails.displayName}`),
     {
@@ -278,14 +285,15 @@ export async function declineFriendRequest(
   return true;
 }
 
-export async function startNewChat(currentUserData, displayName) {
-  const results = await getUser(displayName);
+export async function startNewChat(currentUserData, otherUserData) {
+  //TODO
+  //MIGHT BE DEPRECATED
+  // const results = await getUser(displayName);
+  // if (!results.success) {
+  //   return results;
+  // }
+  // const otherUserData = results.data;
 
-  if (!results.success) {
-    return results;
-  }
-
-  const otherUserData = results.data;
   const users = [
     currentUserData.userDetails.displayName,
     otherUserData.userDetails.displayName,
@@ -303,6 +311,7 @@ export async function startNewChat(currentUserData, displayName) {
     users: [...users],
   });
 
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${currentUserData.userDetails.displayName}`),
     {
@@ -317,6 +326,7 @@ export async function startNewChat(currentUserData, displayName) {
     users: [...users],
   });
 
+  //TODO use updateDoc()
   await setDoc(
     doc(db, 'users', `${otherUserData.userDetails.displayName}`),
     {
@@ -325,5 +335,27 @@ export async function startNewChat(currentUserData, displayName) {
     { merge: true }
   );
 
-  return { success: true, message: 'started new chat' };
+  return { success: true, id: chatRef.id, message: 'started new chat' };
+}
+
+export async function sendMessage(chatId, currentUser, messageContent) {
+  const chatRef = doc(db, 'chats', chatId);
+  const chatSnap = await getDoc(doc(db, 'chats', chatId));
+  if (!chatSnap.exists()) {
+    return false;
+  }
+  const messages = chatSnap.data().messages;
+
+  await updateDoc(chatRef, {
+    messages: [
+      ...messages,
+      {
+        user: currentUser.userDetails.displayName,
+        message: messageContent,
+        timestamp: new Date(),
+        readTimeStamp: '',
+      },
+    ],
+  });
+  return { success: true };
 }

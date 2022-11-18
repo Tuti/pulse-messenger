@@ -12,3 +12,18 @@
 .wrapper {
   height: 100%;
 }
+
+.input {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.user-input {
+  padding: 0.5rem;
+  width: 88%;
+}
+
+.send {
+  padding: 0px 1rem;
+}
