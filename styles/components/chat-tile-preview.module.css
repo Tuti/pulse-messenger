@@ -6,6 +6,9 @@
   height: clamp(40px, 10vh, 60px);
 }
 
+.active {
+  background-color: blue;
+}
 .profile-icon {
   display: flex;
   justify-content: center;

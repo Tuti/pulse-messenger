@@ -2,10 +2,14 @@ import styles from '../../styles/components/chats-list.module.css';
 import ChatTilePreview from './chat-tile-preview';
 import { useUser } from '../../context/userContext';
 import { BsChatDots } from 'react-icons/bs';
+import { useState } from 'react';
+import { getUser } from '../../firebase/firestore';
 
 export default function ChatsList(props) {
   const currentUser = useUser();
   const chats = props.chats;
+  const [activeIndex, setActiveIndex] = useState(-1);
+
   // TEST DATA
   // const chats = [
   //   {
@@ -27,7 +31,9 @@ export default function ChatsList(props) {
   // ];
 
   const chatTiles = chats.map((doc, index) => {
-    console.log('doc', { doc });
+    function getLastMessage(doc) {
+      return doc.messages[doc.messages.length - 1].message;
+    }
     function getUsername(doc) {
       for (const user of doc.users) {
         if (currentUser.displayName !== user) {
@@ -35,16 +41,15 @@ export default function ChatsList(props) {
         }
       }
     }
-
-    // function getLastMessage() {
-    //   return doc.messages[doc.messages.length - 1].content;
-    // }
-
+    const username = getUsername(doc);
     return (
       <ChatTilePreview
-        key={index}
-        username={getUsername(doc)}
-        lastMessage={'last message'}
+        key={username}
+        username={username}
+        lastMessage={getLastMessage(doc)}
+        tileIndex={index}
+        isActive={index === props.activeIndex}
+        setActiveIndex={setActiveIndex}
       />
     );
   });

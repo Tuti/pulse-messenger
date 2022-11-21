@@ -1,6 +1,7 @@
 import styles from '../../styles/components/chat-tile-preview.module.css';
 
 export default function ChatTilePreview(props) {
+  const index = props.index;
   const username = props.username;
   const lastMessage = props.lastMessage;
   //TODO:
@@ -9,8 +10,19 @@ export default function ChatTilePreview(props) {
   //check kevin powell video for good last message css
   //so we get elipses thing at end of message
 
+  function handleClick() {
+    props.setActiveIndex(index);
+  }
+
   return (
-    <div className={styles['info']}>
+    <div
+      className={
+        props.isActive
+          ? `${styles['info']} ${styles['active']}`
+          : `${styles['info']}`
+      }
+      onClick={handleClick}
+    >
       <div className={styles['profile-icon']}>{username.charAt(0)}</div>
       <div className={styles['message-info']}>
         <div className={styles['username']}>{username}</div>
