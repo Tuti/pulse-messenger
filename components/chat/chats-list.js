@@ -8,7 +8,6 @@ import { getUser } from '../../firebase/firestore';
 export default function ChatsList(props) {
   const currentUser = useUser();
   const chats = props.chats;
-  const [activeIndex, setActiveIndex] = useState(-1);
 
   // TEST DATA
   // const chats = [
@@ -32,7 +31,7 @@ export default function ChatsList(props) {
 
   const chatTiles = chats.map((doc, index) => {
     function getLastMessage(doc) {
-      return doc.messages[doc.messages.length - 1].message;
+      return doc?.messages[doc.messages.length - 1].message;
     }
     function getUsername(doc) {
       for (const user of doc.users) {
@@ -48,15 +47,16 @@ export default function ChatsList(props) {
         username={username}
         lastMessage={getLastMessage(doc)}
         tileIndex={index}
-        isActive={index === props.activeIndex}
-        setActiveIndex={setActiveIndex}
+        isActive={index === props.chatActive.activeIndex}
+        setActiveIndex={props.updateActiveIndex}
       />
     );
   });
 
   function handleNewChat() {
     props.setChatNewActive(true);
-    props.setChatActive(false);
+    props.updateIsChatActive(false);
+    props.updateActiveIndex(-1);
     props.setFriendListActive(false);
   }
 

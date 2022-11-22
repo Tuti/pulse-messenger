@@ -15,9 +15,20 @@ export default function Chat() {
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
 
-  const [chatActive, setChatActive] = useState(true);
+  const [chatActive, setChatActive] = useState({
+    isActive: true,
+    activeIndex: 0,
+  });
   const [chatNewActive, setChatNewActive] = useState(false);
   const [friendListActive, setFriendListActive] = useState(false);
+
+  function updateActiveIndex(index) {
+    setChatActive((chatActive) => ({ ...chatActive, activeIndex: index }));
+  }
+
+  function updateIsChatActive(isActive) {
+    setChatActive((chatActive) => ({ ...chatActive, isActive: isActive }));
+  }
 
   useEffect(() => {
     const unsubscribeUser = onSnapshot(
@@ -57,13 +68,16 @@ export default function Chat() {
       <div className={styles['sidebar']}>
         <ChatsList
           chats={chats}
-          setChatActive={setChatActive}
+          chatActive={chatActive}
+          updateIsChatActive={updateIsChatActive}
+          updateActiveIndex={updateActiveIndex}
+          setCurrentChat={setCurrentChat}
           setChatNewActive={setChatNewActive}
           setFriendListActive={setFriendListActive}
         />
       </div>
       <div className={styles['active-panel']}>
-        {chatActive && <ChatCurrent currentChat={currentChat} />}
+        {chatActive.isActive && <ChatCurrent currentChat={currentChat} />}
         {chatNewActive && <ChatStartNew userData={userData} />}
         {friendListActive && <Friends userData={userData} />}
       </div>

@@ -301,6 +301,7 @@ export async function startNewChat(currentUserData, otherUserData) {
 
   const chatRef = await addDoc(collection(db, 'chats'), {
     chatName: '',
+    lastMessageTS: serverTimestamp(),
     users: [...users],
     messages: [],
   });
@@ -347,6 +348,7 @@ export async function sendMessage(chatId, currentUser, messageContent) {
   const messages = chatSnap.data().messages;
 
   await updateDoc(chatRef, {
+    lastMessageTS: serverTimestamp(),
     messages: [
       ...messages,
       {

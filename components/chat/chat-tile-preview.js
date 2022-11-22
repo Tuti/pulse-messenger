@@ -1,9 +1,10 @@
 import styles from '../../styles/components/chat-tile-preview.module.css';
 
 export default function ChatTilePreview(props) {
-  const index = props.index;
+  const index = props.tileIndex;
   const username = props.username;
   const lastMessage = props.lastMessage;
+
   //TODO:
   //Need to figure out firestore db structure for
   //getting last message of the chat
@@ -12,6 +13,7 @@ export default function ChatTilePreview(props) {
 
   function handleClick() {
     props.setActiveIndex(index);
+    props.setCurrentChat(props.chat);
   }
 
   return (

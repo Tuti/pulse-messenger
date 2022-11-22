@@ -1,9 +1,10 @@
 import styles from '../../styles/components/chat-messages.module.css';
 import { useUser } from '../../context/userContext';
 
-export default function ChatMessages() {
+export default function ChatMessages(props) {
   const currentUser = useUser();
-
+  const chat = props.currentChat;
+  const messages = props.currentChat.messages;
   //IF LOGGED IN TO ACCOUNT OTHER THAN TUTI
   //WILL NOT WORK CORRECTLY
   //REMEMBER
@@ -31,7 +32,7 @@ export default function ChatMessages() {
     // },
   ];
 
-  const chatHistory = testMessages.reverse().map((value, index) => {
+  const chatHistory = chat.messages?.reverse().map((value, index) => {
     const isReceivedMessage = value.displayName !== currentUser.displayName;
     return (
       <div
