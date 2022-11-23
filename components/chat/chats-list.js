@@ -1,76 +1,35 @@
 import styles from '../../styles/components/chats-list.module.css';
 import ChatTilePreview from './chat-tile-preview';
-import { useUser } from '../../context/userContext';
 import { BsChatDots } from 'react-icons/bs';
-import { useState } from 'react';
-import { getUser } from '../../firebase/firestore';
 
 export default function ChatsList(props) {
-  const currentUser = useUser();
-  const chats = props.chats;
-
-  // TEST DATA
-  // const chats = [
-  //   {
-  //     username: 'username1',
-  //     lastMessage: 'this is a test message',
-  //   },
-  //   {
-  //     username: 'username2',
-  //     lastMessage: 'this is a test message',
-  //   },
-  //   {
-  //     username: 'username3',
-  //     lastMessage: 'this is a test message',
-  //   },
-  //   {
-  //     username: 'username4',
-  //     lastMessage: 'this is a test message',
-  //   },
-  // ];
-
-  const chatTiles = chats.map((doc, index) => {
-    function getLastMessage(doc) {
-      return doc?.messages[doc.messages.length - 1].message;
-    }
-    function getUsername(doc) {
-      for (const user of doc.users) {
-        if (currentUser.displayName !== user) {
-          return user;
-        }
-      }
-    }
-    const username = getUsername(doc);
+  const chatTiles = props.chats.map((chat, index) => {
     return (
       <ChatTilePreview
-        key={username}
-        username={username}
-        lastMessage={getLastMessage(doc)}
+        key={index}
+        chat={chat}
         tileIndex={index}
-        isActive={index === props.chatActive.activeIndex}
-        setActiveIndex={props.updateActiveIndex}
+        isActive={index === props.activeIndex}
+        updateActivePanel={props.updateActivePanel}
+        setActiveIndex={props.setActiveIndex}
+        setCurrentChat={props.setCurrentChat}
       />
     );
   });
 
-  function handleNewChat() {
-    props.setChatNewActive(true);
-    props.updateIsChatActive(false);
-    props.updateActiveIndex(-1);
-    props.setFriendListActive(false);
+  function handleNewChatClick() {
+    props.updateActivePanel('chatNew');
   }
 
   function handleFriendClick() {
-    props.setFriendListActive(true);
-    props.setChatActive(false);
-    props.setChatNewActive(false);
+    props.updateActivePanel('friendList');
   }
 
   return (
     <>
       <div className={styles['tiles']}>
         <div className={styles['buttons']}>
-          <button onClick={handleNewChat} className={styles['start-chat']}>
+          <button onClick={handleNewChatClick} className={styles['start-chat']}>
             <BsChatDots size={'1.5rem'} />
           </button>
           <button onClick={handleFriendClick} className={styles['friends']}>

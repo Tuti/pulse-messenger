@@ -4,30 +4,50 @@ import ChatsList from './chats-list';
 import Friends from '../friend/friends';
 import ChatStartNew from './chat-start-new';
 import { useState, useEffect } from 'react';
-import { onSnapshot, doc, query, collection, where } from 'firebase/firestore';
-import { db } from '../../firebase/firestore';
+import {
+  onSnapshot,
+  doc,
+  query,
+  collection,
+  where,
+  orderBy,
+} from 'firebase/firestore';
 import { useUser } from '../../context/userContext';
+import { db } from '../../firebase/firestore';
 
 export default function Chat() {
   const currentUser = useUser();
 
-  const [currentChat, setCurrentChat] = useState();
+  const [currentChat, setCurrentChat] = useState([]);
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
 
-  const [chatActive, setChatActive] = useState({
-    isActive: true,
-    activeIndex: 0,
-  });
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [chatActive, setChatActive] = useState(true);
   const [chatNewActive, setChatNewActive] = useState(false);
+
   const [friendListActive, setFriendListActive] = useState(false);
 
-  function updateActiveIndex(index) {
-    setChatActive((chatActive) => ({ ...chatActive, activeIndex: index }));
-  }
-
-  function updateIsChatActive(isActive) {
-    setChatActive((chatActive) => ({ ...chatActive, isActive: isActive }));
+  function updateActivePanel(panelName) {
+    switch (panelName) {
+      case 'chat':
+        setChatActive(true);
+        setChatNewActive(false);
+        setFriendListActive(false);
+        break;
+      case 'chatNew':
+        setChatNewActive(true);
+        setChatActive(false);
+        setFriendListActive(false);
+        break;
+      case 'friendList':
+        setFriendListActive(true);
+        setChatActive(false);
+        setChatNewActive(false);
+        break;
+      default:
+        console.log('reached end of panel switch cases');
+    }
   }
 
   useEffect(() => {
@@ -47,6 +67,10 @@ export default function Chat() {
     const q = query(
       collection(db, 'chats'),
       where('users', 'array-contains', `${currentUser.displayName}`)
+      //TODO
+      //fix query to use orderby so messages show up
+      //in correct order in chat-list
+      //orderBy('lastMessageTS', 'asc');
     );
 
     const unsubscribeChats = onSnapshot(q, (querySnapshot) => {
@@ -69,15 +93,14 @@ export default function Chat() {
         <ChatsList
           chats={chats}
           chatActive={chatActive}
-          updateIsChatActive={updateIsChatActive}
-          updateActiveIndex={updateActiveIndex}
+          activeIndex={activeIndex}
+          setActiveIndex={setActiveIndex}
           setCurrentChat={setCurrentChat}
-          setChatNewActive={setChatNewActive}
-          setFriendListActive={setFriendListActive}
+          updateActivePanel={updateActivePanel}
         />
       </div>
       <div className={styles['active-panel']}>
-        {chatActive.isActive && <ChatCurrent currentChat={currentChat} />}
+        {chatActive && <ChatCurrent currentChat={currentChat} />}
         {chatNewActive && <ChatStartNew userData={userData} />}
         {friendListActive && <Friends userData={userData} />}
       </div>

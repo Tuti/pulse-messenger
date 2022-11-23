@@ -1,19 +1,29 @@
+import { useUser } from '../../context/userContext';
 import styles from '../../styles/components/chat-tile-preview.module.css';
 
 export default function ChatTilePreview(props) {
-  const index = props.tileIndex;
-  const username = props.username;
-  const lastMessage = props.lastMessage;
+  const currentUser = useUser();
+  const chat = props.chat;
+  const userName = getUsername(chat);
+  const lastMessage = getLastMessage(chat);
 
-  //TODO:
-  //Need to figure out firestore db structure for
-  //getting last message of the chat
-  //check kevin powell video for good last message css
-  //so we get elipses thing at end of message
+  function getLastMessage(chat) {
+    return chat?.messages[chat.messages.length - 1].message;
+  }
+
+  function getUsername(chat) {
+    for (const user of chat.users) {
+      if (currentUser.displayName !== user) {
+        return user;
+      }
+    }
+  }
 
   function handleClick() {
-    props.setActiveIndex(index);
-    props.setCurrentChat(props.chat);
+    console.log('clicked', `${props.tileIndex}`);
+    props.setActiveIndex(props.tileIndex);
+    props.setCurrentChat(chat);
+    props.updateActivePanel('chat');
   }
 
   return (
@@ -25,9 +35,9 @@ export default function ChatTilePreview(props) {
       }
       onClick={handleClick}
     >
-      <div className={styles['profile-icon']}>{username.charAt(0)}</div>
+      <div className={styles['profile-icon']}>{userName.charAt(0)}</div>
       <div className={styles['message-info']}>
-        <div className={styles['username']}>{username}</div>
+        <div className={styles['username']}>{userName}</div>
         <div className={styles['last-message']}>{lastMessage}</div>
       </div>
     </div>

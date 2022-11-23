@@ -1,13 +1,12 @@
 import styles from '../../styles/components/chat-messages.module.css';
 import { useUser } from '../../context/userContext';
+import { useEffect, useState } from 'react';
 
 export default function ChatMessages(props) {
   const currentUser = useUser();
   const chat = props.currentChat;
-  const messages = props.currentChat.messages;
-  //IF LOGGED IN TO ACCOUNT OTHER THAN TUTI
-  //WILL NOT WORK CORRECTLY
-  //REMEMBER
+
+  const [messages, setMessages] = useState([]);
   const testMessages = [
     // {
     //   displayName: 'user1',
@@ -32,7 +31,10 @@ export default function ChatMessages(props) {
     // },
   ];
 
-  const chatHistory = chat.messages?.reverse().map((value, index) => {
+  // while (!chat.messages) {
+  //   //wait
+  // }
+  const chatHistory = messages.reverse().map((value, index) => {
     const isReceivedMessage = value.displayName !== currentUser.displayName;
     return (
       <div
@@ -50,12 +52,22 @@ export default function ChatMessages(props) {
         >
           <div className={styles['sub-heading']}>
             <div className={styles['displayName']}>{value.displayName}</div>
-            <div className={styles['date']}>{value.timestamp}</div>
+            <div className={styles['date']}>{`${value.timestamp
+              .toDate()
+              .toLocaleDateString('en-us')}`}</div>
           </div>
           <div className={styles['message-content']}>{value.message}</div>
         </div>
       </div>
     );
   });
+
+  useEffect(() => {
+    if (chat.messages === undefined) {
+      return;
+    }
+    setMessages(chat.messages);
+  }, [chat]);
+
   return <div className={styles['container']}>{chatHistory}</div>;
 }
