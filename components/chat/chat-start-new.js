@@ -15,7 +15,11 @@ export default function ChatStartNew(props) {
       return;
     }
     const newChat = await startNewChat(currentUserData, otherUser);
-    const result = await sendMessage(newChat.id, currentUserData, messageInput);
+    const result = await sendMessage(
+      newChat.id,
+      currentUserData.userDetails.displayName,
+      messageInput
+    );
   }
 
   return (
@@ -55,7 +59,7 @@ export default function ChatStartNew(props) {
       <div className={styles['input']}>
         <input
           className={styles['user-input']}
-          placeholder={'Type your message'}
+          placeholder={'Type message'}
           value={messageInput}
           onChange={(e) => {
             setMessageInput(e.target.value);

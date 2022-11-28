@@ -1,11 +1,25 @@
+import { useState } from 'react';
+import { useUser } from '../../context/userContext';
+import { sendMessage } from '../../firebase/firestore';
 import styles from '../../styles/components/chat-message-input.module.css';
 export default function ChatMessageinput(props) {
+  const currentUser = useUser();
+  const [messageInput, setMessageInput] = useState('');
+
   function handleClick() {
-    props.send();
+    console.log('send message display name: ', currentUser.displayName);
+    sendMessage(props.chatId, currentUser.displayName, messageInput);
   }
   return (
     <div className={styles['input']}>
-      <input className={styles['user-input']} />
+      <input
+        className={styles['user-input']}
+        value={messageInput}
+        onChange={(e) => {
+          setMessageInput(e.target.value);
+        }}
+        placeholder={'Type message'}
+      />
       <button className={styles['send']} onClick={handleClick}>
         send
       </button>

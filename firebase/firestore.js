@@ -339,7 +339,11 @@ export async function startNewChat(currentUserData, otherUserData) {
   return { success: true, id: chatRef.id, message: 'started new chat' };
 }
 
-export async function sendMessage(chatId, currentUser, messageContent) {
+export async function sendMessage(
+  chatId,
+  currentUserDisplayName,
+  messageContent
+) {
   const chatRef = doc(db, 'chats', chatId);
   const chatSnap = await getDoc(doc(db, 'chats', chatId));
   if (!chatSnap.exists()) {
@@ -352,7 +356,7 @@ export async function sendMessage(chatId, currentUser, messageContent) {
     messages: [
       ...messages,
       {
-        user: currentUser.userDetails.displayName,
+        user: currentUserDisplayName,
         message: messageContent,
         timestamp: new Date(),
         readTimeStamp: '',

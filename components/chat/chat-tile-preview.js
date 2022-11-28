@@ -4,10 +4,13 @@ import styles from '../../styles/components/chat-tile-preview.module.css';
 export default function ChatTilePreview(props) {
   const currentUser = useUser();
   const chat = props.chat;
-  const userName = getUsername(chat);
-  const lastMessage = getLastMessage(chat);
+  const userName = getUsername(chat.data);
+  const lastMessage = getLastMessage(chat.data);
 
   function getLastMessage(chat) {
+    if (chat.messages.length - 1 < 0) {
+      return '';
+    }
     return chat?.messages[chat.messages.length - 1].message;
   }
 

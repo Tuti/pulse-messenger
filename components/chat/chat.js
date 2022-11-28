@@ -4,20 +4,12 @@ import ChatsList from './chats-list';
 import Friends from '../friend/friends';
 import ChatStartNew from './chat-start-new';
 import { useState, useEffect } from 'react';
-import {
-  onSnapshot,
-  doc,
-  query,
-  collection,
-  where,
-  orderBy,
-} from 'firebase/firestore';
+import { onSnapshot, doc, query, collection, where } from 'firebase/firestore';
 import { useUser } from '../../context/userContext';
 import { db } from '../../firebase/firestore';
 
 export default function Chat() {
   const currentUser = useUser();
-
   const [currentChat, setCurrentChat] = useState([]);
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
@@ -74,11 +66,18 @@ export default function Chat() {
     );
 
     const unsubscribeChats = onSnapshot(q, (querySnapshot) => {
-      const chats = [];
+      const chats = []; //map?
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-        chats.push(doc.data());
+        if (doc.id === currentChat.id) {
+          setCurrentChat((currentChat) => ({
+            ...currentChat,
+            data: doc.data(),
+          }));
+        }
+        chats.push({ id: doc.id, data: doc.data() });
       });
+
+      console.log('updated chats');
       setChats(chats);
     });
 

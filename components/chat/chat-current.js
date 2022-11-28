@@ -6,7 +6,7 @@ export default function ChatCurrent(props) {
   return (
     <div className={styles['container']}>
       <ChatMessages currentChat={props.currentChat} />
-      <ChatMessageinput />
+      <ChatMessageinput chatId={props.currentChat.id} />
     </div>
   );
 }

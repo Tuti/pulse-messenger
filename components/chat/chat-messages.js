@@ -1,73 +1,48 @@
 import styles from '../../styles/components/chat-messages.module.css';
 import { useUser } from '../../context/userContext';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ChatMessages(props) {
   const currentUser = useUser();
   const chat = props.currentChat;
+  const [chatHistory, setChatHistory] = useState([]);
 
-  const [messages, setMessages] = useState([]);
-  const testMessages = [
-    // {
-    //   displayName: 'user1',
-    //   message: 'this is a test message',
-    //   timestamp: '7:00am',
-    // },
-    // {
-    //   displayName: 'tuti',
-    //   message:
-    //     'this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message this is a test message ',
-    //   timestamp: '7:00am',
-    // },
-    // {
-    //   displayName: 'user1',
-    //   message: 'this is a test message',
-    //   timestamp: '7:00am',
-    // },
-    // {
-    //   displayName: 'tuti',
-    //   message: 'this is a test message',
-    //   timestamp: '7:00am',
-    // },
-  ];
+  function generateChatHistory() {
+    if (chat.data === undefined) {
+      return [];
+    }
+    const history = chat.data.messages.map((value, index) => {
+      console.log('user:', value.user, '| chat content:', value.message);
 
-  // while (!chat.messages) {
-  //   //wait
-  // }
-  const chatHistory = messages.reverse().map((value, index) => {
-    const isReceivedMessage = value.displayName !== currentUser.displayName;
-    return (
-      <div
-        key={index}
-        className={
-          isReceivedMessage ? `${styles['received']}` : `${styles['sent']}`
-        }
-      >
+      const isReceivedMessage = value.user !== currentUser.displayName;
+      return (
         <div
+          key={index}
           className={
-            isReceivedMessage
-              ? `${styles['wrapper']} ${styles['received-bg']}`
-              : `${styles['wrapper']} ${styles['sent-bg']}`
+            isReceivedMessage ? `${styles['received']}` : `${styles['sent']}`
           }
         >
-          <div className={styles['sub-heading']}>
-            <div className={styles['displayName']}>{value.displayName}</div>
-            <div className={styles['date']}>{`${value.timestamp
-              .toDate()
-              .toLocaleDateString('en-us')}`}</div>
+          <div
+            className={
+              isReceivedMessage
+                ? `${styles['wrapper']} ${styles['received-bg']}`
+                : `${styles['wrapper']} ${styles['sent-bg']}`
+            }
+          >
+            <div className={styles['sub-heading']}>
+              <div className={styles['displayName']}>{value.displayName}</div>
+              <div className={styles['date']}>{`${value.timestamp
+                .toDate()
+                .toLocaleDateString('en-us')}`}</div>
+            </div>
+            <div className={styles['message-content']}>{value.message}</div>
           </div>
-          <div className={styles['message-content']}>{value.message}</div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
 
-  useEffect(() => {
-    if (chat.messages === undefined) {
-      return;
-    }
-    setMessages(chat.messages);
-  }, [chat]);
+    return chatHistory;
+  }
 
   return <div className={styles['container']}>{chatHistory}</div>;
 }
