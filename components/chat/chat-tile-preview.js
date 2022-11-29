@@ -23,7 +23,7 @@ export default function ChatTilePreview(props) {
   }
 
   function handleClick() {
-    console.log('clicked', `${props.tileIndex}`);
+    console.log('clicked chat tile preview', { chat });
     props.setActiveIndex(props.tileIndex);
     props.setCurrentChat(chat);
     props.updateActivePanel('chat');

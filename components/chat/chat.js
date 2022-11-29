@@ -88,6 +88,13 @@ export default function Chat() {
 
   return (
     <div className={styles['grid']}>
+      <button
+        onClick={() => {
+          console.log('current chat', { currentChat });
+        }}
+      >
+        show current chat
+      </button>
       <div className={styles['sidebar']}>
         <ChatsList
           chats={chats}

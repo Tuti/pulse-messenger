@@ -5,7 +5,10 @@ import ChatMessageinput from './chat-message-input';
 export default function ChatCurrent(props) {
   return (
     <div className={styles['container']}>
-      <ChatMessages currentChat={props.currentChat} />
+      <ChatMessages
+        currentChat={props.currentChat}
+        messages={props.currentChat?.data?.messages}
+      />
       <ChatMessageinput chatId={props.currentChat.id} />
     </div>
   );
