@@ -10,7 +10,7 @@ import { db } from '../../firebase/firestore';
 
 export default function Chat() {
   const currentUser = useUser();
-  const [currentChat, setCurrentChat] = useState([]);
+  const [currentChat, setCurrentChat] = useState('');
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
 
@@ -66,15 +66,9 @@ export default function Chat() {
     );
 
     const unsubscribeChats = onSnapshot(q, (querySnapshot) => {
-      const chats = []; //map?
+      const chats = new Map(); //map?
       querySnapshot.forEach((doc) => {
-        if (doc.id === currentChat.id) {
-          setCurrentChat((currentChat) => ({
-            ...currentChat,
-            data: doc.data(),
-          }));
-        }
-        chats.push({ id: doc.id, data: doc.data() });
+        chats.set(doc.id, doc.data());
       });
 
       console.log('updated chats');
