@@ -95,13 +95,6 @@ export default function Chat() {
 
   return (
     <div className={styles['grid']}>
-      <button
-        onClick={() => {
-          console.log('clicked', { currentChat });
-        }}
-      >
-        click me
-      </button>
       <div className={styles['sidebar']}>
         <ChatsList
           currentChat={currentChat}

@@ -9,7 +9,7 @@ export default function ChatMessages(props) {
   const [chatHistory, setChatHistory] = useState([]);
 
   function generateMessages() {
-    const history = chat.data.messages.map((value, index) => {
+    const history = messages.reverse().map((value, index) => {
       const isReceivedMessage = value.user !== currentUser.displayName;
       return (
         <div
@@ -44,34 +44,6 @@ export default function ChatMessages(props) {
     console.log('chat changes');
     setChatHistory(generateMessages(chat));
   }, [chat]);
-
-  // const history = chat.data.chatHistory.map((value, index) => {
-  //   const isReceivedMessage = value.user !== currentUser.displayName;
-  //   return (
-  //     <div
-  //       key={index}
-  //       className={
-  //         isReceivedMessage ? `${styles['received']}` : `${styles['sent']}`
-  //       }
-  //     >
-  //       <div
-  //         className={
-  //           isReceivedMessage
-  //             ? `${styles['wrapper']} ${styles['received-bg']}`
-  //             : `${styles['wrapper']} ${styles['sent-bg']}`
-  //         }
-  //       >
-  //         <div className={styles['sub-heading']}>
-  //           <div className={styles['displayName']}>{value.displayName}</div>
-  //           <div className={styles['date']}>{`${value.timestamp
-  //             .toDate()
-  //             .toLocaleDateString('en-us')}`}</div>
-  //         </div>
-  //         <div className={styles['message-content']}>{value.message}</div>
-  //       </div>
-  //     </div>
-  //   );
-  // });
 
   return <div className={styles['container']}>{chatHistory}</div>;
 }

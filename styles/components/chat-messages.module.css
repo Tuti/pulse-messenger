@@ -3,11 +3,13 @@
   flex-direction: column-reverse;
   margin: 1rem;
   flex: 1;
+  overflow-y: scroll;
 }
 
 .sent {
   display: flex;
   flex-direction: row-reverse;
+  margin-bottom: 0.5rem;
 }
 
 .sent-bg {
@@ -17,6 +19,7 @@
 
 .received {
   display: flex;
+  margin-bottom: 0.5rem;
 }
 
 .received-bg {
