@@ -3,15 +3,16 @@ import ChatTilePreview from './chat-tile-preview';
 import { BsChatDots } from 'react-icons/bs';
 
 export default function ChatsList(props) {
-  const chatTiles = props.chats.map((chat, index) => {
+  const chatTiles = [...props.chats].map((chat) => {
+    const id = chat[0];
+    const chatData = chat[1];
     return (
       <ChatTilePreview
-        key={index}
-        chat={chat}
-        tileIndex={index}
-        isActive={index === props.activeIndex}
+        key={id}
+        id={id}
+        chat={chatData}
+        isActive={id === props.currentChat.id}
         updateActivePanel={props.updateActivePanel}
-        setActiveIndex={props.setActiveIndex}
         setCurrentChat={props.setCurrentChat}
       />
     );

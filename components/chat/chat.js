@@ -10,7 +10,7 @@ import { db } from '../../firebase/firestore';
 
 export default function Chat() {
   const currentUser = useUser();
-  const [currentChat, setCurrentChat] = useState('');
+  const [currentChat, setCurrentChat] = useState(false);
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
 
@@ -68,10 +68,16 @@ export default function Chat() {
     const unsubscribeChats = onSnapshot(q, (querySnapshot) => {
       const chats = new Map(); //map?
       querySnapshot.forEach((doc) => {
+        console.log('doc id: ', doc.id);
+        console.log('current id: ', { currentChat });
+        if (doc.id === currentChat.id) {
+          console.log('updating current chat');
+          setCurrentChat({ id: doc.id, data: doc.data() });
+        }
         chats.set(doc.id, doc.data());
       });
 
-      console.log('updated chats');
+      console.log('updated chats', { chats });
       setChats(chats);
     });
 
@@ -80,27 +86,33 @@ export default function Chat() {
     };
   }, []);
 
+  useEffect(() => {
+    if (currentChat.id === undefined) {
+      return;
+    }
+    setCurrentChat({ id: currentChat.id, data: chats.get(currentChat.id) });
+  }, [chats]);
+
   return (
     <div className={styles['grid']}>
       <button
         onClick={() => {
-          console.log('current chat', { currentChat });
+          console.log('clicked', { currentChat });
         }}
       >
-        show current chat
+        click me
       </button>
       <div className={styles['sidebar']}>
         <ChatsList
+          currentChat={currentChat}
           chats={chats}
           chatActive={chatActive}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveIndex}
           setCurrentChat={setCurrentChat}
           updateActivePanel={updateActivePanel}
         />
       </div>
       <div className={styles['active-panel']}>
-        {chatActive && <ChatCurrent currentChat={currentChat} />}
+        {chatActive && currentChat && <ChatCurrent currentChat={currentChat} />}
         {chatNewActive && <ChatStartNew userData={userData} />}
         {friendListActive && <Friends userData={userData} />}
       </div>
