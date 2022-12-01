@@ -23,7 +23,10 @@ export default function ChatTilePreview(props) {
   }
 
   function handleClick() {
-    // console.log('clicked chat tile preview', props.id, chat);
+    if (props.id === props.currentChat.id) {
+      return;
+    }
+
     props.setCurrentChat({ id: props.id, data: chat });
     props.updateActivePanel('chat');
   }

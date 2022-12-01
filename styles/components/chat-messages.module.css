@@ -3,6 +3,7 @@
   flex-direction: column-reverse;
   margin: 1rem;
   flex: 1;
+  max-height: 50%;
   overflow-y: scroll;
 }
 
@@ -27,7 +28,7 @@
   border: 1px solid white;
 }
 
-.wrapper {
+.message {
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
@@ -48,4 +49,5 @@
 .message-content {
   display: flex;
   flex-wrap: wrap;
+  word-break: break-all;
 }

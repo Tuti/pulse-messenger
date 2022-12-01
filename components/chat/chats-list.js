@@ -11,6 +11,7 @@ export default function ChatsList(props) {
         key={id}
         id={id}
         chat={chatData}
+        currentChat={props.currentChat}
         isActive={id === props.currentChat.id}
         updateActivePanel={props.updateActivePanel}
         setCurrentChat={props.setCurrentChat}

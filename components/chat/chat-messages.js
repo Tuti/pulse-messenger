@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 export default function ChatMessages(props) {
   const currentUser = useUser();
   const chat = props.currentChat;
-  const messages = props.currentChat.data.messages;
+  const messages = [...props.currentChat.data.messages].reverse();
   const [chatHistory, setChatHistory] = useState([]);
 
   function generateMessages() {
-    const history = messages.reverse().map((value, index) => {
+    const history = messages.map((value, index) => {
       const isReceivedMessage = value.user !== currentUser.displayName;
       return (
         <div
@@ -21,15 +21,15 @@ export default function ChatMessages(props) {
           <div
             className={
               isReceivedMessage
-                ? `${styles['wrapper']} ${styles['received-bg']}`
-                : `${styles['wrapper']} ${styles['sent-bg']}`
+                ? `${styles['message']} ${styles['received-bg']}`
+                : `${styles['message']} ${styles['sent-bg']}`
             }
           >
             <div className={styles['sub-heading']}>
-              <div className={styles['displayName']}>{value.displayName}</div>
+              <div className={styles['displayName']}>{value.user}</div>
               <div className={styles['date']}>{`${value.timestamp
                 .toDate()
-                .toLocaleDateString('en-us')}`}</div>
+                .toLocaleTimeString()}`}</div>
             </div>
             <div className={styles['message-content']}>{value.message}</div>
           </div>

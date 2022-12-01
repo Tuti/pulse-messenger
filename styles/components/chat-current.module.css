@@ -1,6 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  justify-content: end;
+  height: 100%;
   margin: 1rem;
 }

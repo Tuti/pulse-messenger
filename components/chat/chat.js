@@ -14,7 +14,6 @@ export default function Chat() {
   const [chats, setChats] = useState([]);
   const [userData, setUserData] = useState();
 
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [chatActive, setChatActive] = useState(true);
   const [chatNewActive, setChatNewActive] = useState(false);
 
