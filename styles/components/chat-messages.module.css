@@ -3,7 +3,6 @@
   flex-direction: column-reverse;
   margin: 1rem;
   flex: 1;
-  max-height: 50%;
   overflow-y: scroll;
 }
 
