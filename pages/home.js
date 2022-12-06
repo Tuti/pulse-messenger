@@ -14,9 +14,8 @@ export default function Home() {
       )}
       {currentUser && (
         <div className={styles['container']}>
-          {/* <Navbar showLogin={false} /> */}
-          {/* <Chat /> */}
-          <div className={styles['test']}>asdfasdfasdf</div>
+          <Navbar showLogin={false} />
+          <Chat />
         </div>
       )}
     </>
